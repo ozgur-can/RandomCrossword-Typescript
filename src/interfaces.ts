@@ -22,6 +22,7 @@ interface IWordDb {
   addUpToDown(word: IWord, x: number, y: number, charIndexOfNewChar?: number);
   checkCoordEmpty(x: number, y: number): boolean;
   existSameChar(char: string): boolean | ICoord; // search same unused char
+  areAdjacentCharsUnused(word: IWord, char: string): boolean;
   printItems();
   useChar(x: number, y: number);
 }

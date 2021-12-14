@@ -61,10 +61,11 @@ class WordDb implements IWordDb {
           });
         }
       }
-      
+
       // update unused char of word
       word.useChar(word.value[charIndexOfNewChar]);
       this.useChar(x, y);
+
     }
     else {
       for (let i = y; i < word.value.length; i++) {
@@ -115,13 +116,14 @@ class WordDb implements IWordDb {
     let exist: boolean | ICoord = false;
 
     for (const char of this.chars) {
-      let charIndex = char[0].split("*"); // 2*0 > `2`, `0`
+      let charCoord = char[0].split("*"); // 2*0 > `2`, `0`
       let wordObject = char[1]; // char, parent, direction
       let unusedCharIndex = wordObject.parent.unusedChars.indexOf(charToSearch);
-      if (charToSearch == wordObject.char && unusedCharIndex != -1) {
+      
+      if (charToSearch == wordObject.char && unusedCharIndex != -1 && this.areAdjacentCharsUnused(wordObject.parent, charToSearch)) {
         exist = {
-          x: Number(charIndex[0]),
-          y: Number(charIndex[1]),
+          x: Number(charCoord[0]),
+          y: Number(charCoord[1]),
           direction: char[1].direction,
         };
         break;
@@ -130,6 +132,22 @@ class WordDb implements IWordDb {
 
     return exist;
   }
+  
+  areAdjacentCharsUnused(word: IWord, charToSearch: string): boolean {
+    let charIndex = word.value.indexOf(charToSearch);
+    
+    if(charIndex == 0 && word.checkCharUnused(charIndex + 1)){
+      return true;
+    }
+    else if(charIndex == word.value.length - 1 && word.checkCharUnused(charIndex - 1)){
+      return true;
+    } 
+    else if((charIndex > 0 || charIndex < word.value.length - 1) && word.checkCharUnused(charIndex - 1) && word.checkCharUnused(charIndex + 1)){
+      return true
+      }
+    else return false;
+  }
+
 
   printItems() {
     let arr = [[]];
