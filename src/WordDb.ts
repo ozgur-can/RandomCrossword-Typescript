@@ -14,10 +14,17 @@ class WordDb implements IWordDb {
   addToDb(word: IWord, charIndexOfNewChar: number, oldCharData: ICoord) {
     // db is empty
     if (this.chars.size == 0) {
+      let random = Math.random();
+
+      // add first word L-R / U-D randomly
+      if(random > 0.5)
       this.addLeftToRight(word, 0, 0);
+
+      else
+      this.addUpToDown(word, 0, 0);
     }
     // db is not empty
-    else {
+    else {      
       // old L-R, new U-D
       if (oldCharData.direction == DbAddDirection.leftToRight) {
         this.addUpToDown(
@@ -41,10 +48,24 @@ class WordDb implements IWordDb {
   }
 
   addUpToDown(word: IWord, x: number, y: number, charIndexOfNewChar?: number) {
-    for (let i = y - charIndexOfNewChar; i < y - charIndexOfNewChar + word.value.length; i++) {
-      if (!this.checkCoordEmpty(x, i)) {
-        continue;
-      } else {
+    if(charIndexOfNewChar){
+      for (let i = y - charIndexOfNewChar, j = 0; j < word.value.length, i < y - charIndexOfNewChar + word.value.length; i++, j++) {
+        if (!this.checkCoordEmpty(x, i)) {
+          continue;
+        } else {        
+          this.chars.set(`${x}*${i}`, {
+            char: word.value[j],
+            parent: word,
+            direction: DbAddDirection.upToDown,
+          });
+        }
+      }
+      // update unused char of word
+      word.useChar(charIndexOfNewChar);
+      this.useChar(x, y);
+    }
+    else {
+      for (let i = y; i < word.value.length; i++) {
         this.chars.set(`${x}*${i}`, {
           char: word.value[i],
           parent: word,
@@ -52,9 +73,7 @@ class WordDb implements IWordDb {
         });
       }
     }
-    // update unused char of word
-    word.useChar(charIndexOfNewChar);
-    this.useChar(x, y);
+
   }
 
   addLeftToRight(word: IWord, x: number, y: number, charIndexOfNewChar?: number) {
@@ -96,7 +115,7 @@ class WordDb implements IWordDb {
         exist = {
           x: Number(charIndex[0]),
           y: Number(charIndex[1]),
-          direction: DbAddDirection.leftToRight,
+          direction: char[1].direction,
         };
         break;
       }
@@ -108,27 +127,27 @@ class WordDb implements IWordDb {
   printItems() {
     let arr = [[]];
 
-    for (let i = 0; i < 4; i++) {
-      let temp = [];
-      for (let j = 0; j < 4; j++) {
-        temp.push("   ");
-      }
-      arr.push(temp);
-    }
-
-    for (const char of this.chars) {
-      let coords = char[0].split("*");
-      let cX = Number(coords[0]);
-      let cY = Number(coords[1]);
-
-      arr[cY][cX] = ` ${char[1].char} `;
-    }
-
-    console.log(arr);
+    // for (let i = 0; i < 4; i++) {
+    //   let temp = [];
+    //   for (let j = 0; j < 4; j++) {
+    //     temp.push("   ");
+    //   }
+    //   arr.push(temp);
+    // }
 
     // for (const char of this.chars) {
-    //   console.log(char);
+    //   let coords = char[0].split("*");
+    //   let cX = Number(coords[0]);
+    //   let cY = Number(coords[1]);
+
+    //   arr[cY][cX] = ` ${char[1].char} `;
     // }
+
+    // console.log(arr);
+    
+    for (const char of this.chars) {
+      console.log(char);
+    }
   }
 
   useChar(x: number, y: number) {
