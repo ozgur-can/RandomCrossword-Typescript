@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/zgrcnltnk/WordPuzzleGame/issues"
   },
-  "homepage": "https://github.com/zgrcnltnk/WordPuzzleGame#readme"
+  "homepage": "https://github.com/zgrcnltnk/WordPuzzleGame#readme",
+  "devDependencies": {
+    "esbuild": "^0.14.3"
+  }
 }

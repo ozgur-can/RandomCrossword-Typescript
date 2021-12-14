@@ -67,7 +67,7 @@ class WordPuzzle implements IWordPuzzle {
       }
     }
 
-    // this.wordDb.printItems();
+    this.wordDb.printItems();
   }
 }
 

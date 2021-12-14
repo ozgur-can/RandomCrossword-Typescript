@@ -86,9 +86,25 @@ class WordDb implements IWordDb {
   }
 
   printItems() {
-    for (const char of this.chars) {
-      console.log(char[1].parent.unusedChars);
+    let arr = [[]];
+
+    for (let i = 0; i < 4; i++) {
+      let temp = [];
+      for (let j = 0; j < 4; j++) {
+        temp.push("   ");
+      }
+      arr.push(temp);
     }
+
+    for (const char of this.chars) {
+      let coords = char[0].split("*");
+      let cX = Number(coords[0]);
+      let cY = Number(coords[1]);
+
+      arr[cY][cX] = ` ${char[1].char} `;
+    }
+
+    console.log(arr);
   }
 
   useChar(x: number, y: number) {
