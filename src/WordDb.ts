@@ -36,11 +36,15 @@ class WordDb implements IWordDb {
 
   addUpToDown(word: IWord, x: number, y: number, charIndexOfNewChar?: number) {
     for (let i = y - charIndexOfNewChar; i < word.value.length; i++) {
-      this.chars.set(`${x}*${i}`, {
-        char: word.value[charIndexOfNewChar],
-        parent: word,
-        direction: DbAddDirection.upToDown,
-      });
+      if (!this.checkCoordEmpty(x, i)) {        
+        continue;
+      } else {        
+        this.chars.set(`${x}*${i}`, {
+          char: word.value[i],
+          parent: word,
+          direction: DbAddDirection.upToDown,
+        });
+      }
     }
     // update unused char of word
     word.useChar(charIndexOfNewChar);
@@ -57,7 +61,7 @@ class WordDb implements IWordDb {
   }
 
   checkCoordEmpty(x: number, y: number): boolean {
-    return this.chars.has(`${x}*${y}`);
+    return !this.chars.has(`${x}*${y}`);
   }
 
   existSameChar(charToSearch: string): boolean | ICoord {

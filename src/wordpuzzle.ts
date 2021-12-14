@@ -43,19 +43,18 @@ class WordPuzzle implements IWordPuzzle {
   }
 
   minarySearch(word: IWord, charIndex: number) {
-    if (word.checkCharUnused(charIndex)) {
-      // dbye ekle, add extra
+    // check char is exist & same & unused in db
+    let exist: boolean | ICoord = this.wordDb.existSameChar(
+      word.value[charIndex]
+    );
 
-      // check char is exist & same & unused in db
-      let exist : boolean | ICoord = this.wordDb.existSameChar(word.value[charIndex]);
-
-      // add this word to db
-      if (exist != false) {
-        this.wordDb.addToDb(word, charIndex, (exist as ICoord)); 
+    // add this word to db
+    if (exist != false) {
+      this.wordDb.addToDb(word, charIndex, exist as ICoord);            
+    } else {      
+      if(charIndex < word.value.length - 1) {
+        return this.minarySearch(word, charIndex + 1);
       }
-
-      // word.useChar(charIndex);
-      return this.minarySearch(word, charIndex + 1);
     }
   }
 
@@ -63,7 +62,6 @@ class WordPuzzle implements IWordPuzzle {
     for (let i = 0; i < this.words.length; i++) {
       if (i == 0) {
         this.wordDb.addToDb(this.words[i]);
-        // this.wordDb.printItems();
       } else {
         this.minarySearch(this.words[i], 0);
       }
