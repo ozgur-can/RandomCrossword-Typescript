@@ -1,0 +1,21 @@
+{
+  "name": "WordPuzzleGame",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zgrcnltnk/WordPuzzleGame.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zgrcnltnk/WordPuzzleGame/issues"
+  },
+  "homepage": "https://github.com/zgrcnltnk/WordPuzzleGame#readme"
+}
