@@ -30,12 +30,18 @@ class WordDb implements IWordDb {
 
       // old U-D, new L-R
       if (oldCharData.direction == DbAddDirection.upToDown) {
+        this.addLeftToRight(
+          word,
+          oldCharData.x,
+          oldCharData.y,
+          charIndexOfNewChar
+        );
       }
     }
   }
 
   addUpToDown(word: IWord, x: number, y: number, charIndexOfNewChar?: number) {
-    for (let i = y - charIndexOfNewChar; i < word.value.length; i++) {
+    for (let i = y - charIndexOfNewChar; i < y - charIndexOfNewChar + word.value.length; i++) {
       if (!this.checkCoordEmpty(x, i)) {
         continue;
       } else {
@@ -51,13 +57,27 @@ class WordDb implements IWordDb {
     this.useChar(x, y);
   }
 
-  addLeftToRight(word: IWord, x: number, y: number) {
-    for (let i = x; i < word.value.length; i++) {
-      this.chars.set(`${i}*${y}`, {
-        char: word.value[i],
-        parent: word,
-        direction: DbAddDirection.leftToRight,
-      });
+  addLeftToRight(word: IWord, x: number, y: number, charIndexOfNewChar?: number) {
+    if (charIndexOfNewChar) {
+      for (let i = x - charIndexOfNewChar; i < x - charIndexOfNewChar + word.value.length; i++) {
+        if (!this.checkCoordEmpty(i, y)) {
+          continue;
+        } else {
+          this.chars.set(`${i}*${y}`, {
+            char: word.value[i],
+            parent: word,
+            direction: DbAddDirection.leftToRight,
+          });
+        }
+      }
+    } else {
+      for (let i = x; i < word.value.length; i++) {
+        this.chars.set(`${i}*${y}`, {
+          char: word.value[i],
+          parent: word,
+          direction: DbAddDirection.leftToRight,
+        });
+      }
     }
   }
 
@@ -105,6 +125,10 @@ class WordDb implements IWordDb {
     }
 
     console.log(arr);
+
+    // for (const char of this.chars) {
+    //   console.log(char);
+    // }
   }
 
   useChar(x: number, y: number) {
