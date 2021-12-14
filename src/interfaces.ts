@@ -4,7 +4,8 @@ interface IWordPuzzle {
   wordDb: IWordDb;
   addWords(words: string[]);
   sortWordsDesc();
-  joinWords();
+  search(word: IWord, charIndex: number);
+  run();
 }
 
 interface IWord {
