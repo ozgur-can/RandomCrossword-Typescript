@@ -36,9 +36,9 @@ class WordDb implements IWordDb {
 
   addUpToDown(word: IWord, x: number, y: number, charIndexOfNewChar?: number) {
     for (let i = y - charIndexOfNewChar; i < word.value.length; i++) {
-      if (!this.checkCoordEmpty(x, i)) {        
+      if (!this.checkCoordEmpty(x, i)) {
         continue;
-      } else {        
+      } else {
         this.chars.set(`${x}*${i}`, {
           char: word.value[i],
           parent: word,
@@ -48,6 +48,7 @@ class WordDb implements IWordDb {
     }
     // update unused char of word
     word.useChar(charIndexOfNewChar);
+    this.useChar(x, y);
   }
 
   addLeftToRight(word: IWord, x: number, y: number) {
@@ -86,7 +87,16 @@ class WordDb implements IWordDb {
 
   printItems() {
     for (const char of this.chars) {
-      console.log(char);
+      console.log(char[1].parent.unusedChars);
+    }
+  }
+
+  useChar(x: number, y: number) {
+    let char = this.chars.get(`${x}*${y}`);
+
+    if (char) {
+      // remove the used existing char from db
+      char.parent.useChar(char.parent.value.indexOf(char.char));
     }
   }
 }

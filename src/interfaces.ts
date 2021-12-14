@@ -19,9 +19,16 @@ interface IWordDb {
   addToDb(word: IWord, charIndexOfNewChar?: number, oldCharData?: ICoord);
   addLeftToRight(word: IWord, x: number, y: number);
   checkCoordEmpty(x: number, y: number): boolean;
-  addUpToDown(word: IWord, number, x: number, y: number, charIndexOfNewChar?: number);
+  addUpToDown(
+    word: IWord,
+    number,
+    x: number,
+    y: number,
+    charIndexOfNewChar?: number
+  );
   existSameChar(char: string): boolean | ICoord; // search same unused char
   printItems();
+  useChar(x: number, y: number);
 }
 
 interface IWordDbObject {
