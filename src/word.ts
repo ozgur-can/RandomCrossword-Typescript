@@ -16,8 +16,8 @@ class Word implements IWord {
     }
   }
 
-  useChar(charIndex: number) {
-    this.unusedChars.splice(charIndex, 1);
+  useChar(charToSearch: string) {
+    this.unusedChars = this.unusedChars.filter((char) => char != charToSearch);
   }
 }
 

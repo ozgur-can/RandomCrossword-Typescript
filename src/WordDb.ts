@@ -22,11 +22,12 @@ class WordDb implements IWordDb {
 
       else
       this.addUpToDown(word, 0, 0);
+
     }
     // db is not empty
     else {      
       // old L-R, new U-D
-      if (oldCharData.direction == DbAddDirection.leftToRight) {
+      if (oldCharData.direction == DbAddDirection.leftToRight) {        
         this.addUpToDown(
           word,
           oldCharData.x,
@@ -36,7 +37,7 @@ class WordDb implements IWordDb {
       }
 
       // old U-D, new L-R
-      if (oldCharData.direction == DbAddDirection.upToDown) {
+      if (oldCharData.direction == DbAddDirection.upToDown) {        
         this.addLeftToRight(
           word,
           oldCharData.x,
@@ -47,9 +48,9 @@ class WordDb implements IWordDb {
     }
   }
 
-  addUpToDown(word: IWord, x: number, y: number, charIndexOfNewChar?: number) {
-    if(charIndexOfNewChar){
-      for (let i = y - charIndexOfNewChar, j = 0; j < word.value.length, i < y - charIndexOfNewChar + word.value.length; i++, j++) {
+  addUpToDown(word: IWord, x: number, y: number, charIndexOfNewChar?: number) {   
+    if(typeof charIndexOfNewChar !== "undefined"){
+      for (let i = y - charIndexOfNewChar, j = 0; j < word.value.length, i < y - charIndexOfNewChar + word.value.length; i++, j++) {        
         if (!this.checkCoordEmpty(x, i)) {
           continue;
         } else {        
@@ -60,8 +61,9 @@ class WordDb implements IWordDb {
           });
         }
       }
+      
       // update unused char of word
-      word.useChar(charIndexOfNewChar);
+      word.useChar(word.value[charIndexOfNewChar]);
       this.useChar(x, y);
     }
     else {
@@ -77,18 +79,23 @@ class WordDb implements IWordDb {
   }
 
   addLeftToRight(word: IWord, x: number, y: number, charIndexOfNewChar?: number) {
-    if (charIndexOfNewChar) {
-      for (let i = x - charIndexOfNewChar; i < x - charIndexOfNewChar + word.value.length; i++) {
+    if (typeof charIndexOfNewChar !== "undefined") {
+      for (let i = x - charIndexOfNewChar, j = 0; j < word.value.length, i < x - charIndexOfNewChar + word.value.length; i++, j++) {
         if (!this.checkCoordEmpty(i, y)) {
           continue;
         } else {
           this.chars.set(`${i}*${y}`, {
-            char: word.value[i],
+            char: word.value[j],
             parent: word,
             direction: DbAddDirection.leftToRight,
           });
         }
       }
+
+      // update unused char of word
+      word.useChar(word.value[charIndexOfNewChar]);
+      this.useChar(x, y);
+      
     } else {
       for (let i = x; i < word.value.length; i++) {
         this.chars.set(`${i}*${y}`, {
@@ -155,7 +162,7 @@ class WordDb implements IWordDb {
 
     if (char) {
       // remove the used existing char from db
-      char.parent.useChar(char.parent.value.indexOf(char.char));
+      char.parent.useChar(char.char);
     }
   }
 }

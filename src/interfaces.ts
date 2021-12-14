@@ -12,7 +12,7 @@ interface IWord {
   value: string;
   unusedChars: string[];
   checkCharUnused(charIndex: number): boolean;
-  useChar(charIndex: number);
+  useChar(char: string);
 }
 
 interface IWordDb {
