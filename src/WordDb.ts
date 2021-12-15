@@ -21,8 +21,6 @@ class WordDb implements IWordDb {
       let random = Math.random();
 
       if (random > 0) {
-        console.log("L-R");
-
         // Direction L-R
 
         for (let i = 0; i < word.length; i++) {
@@ -37,7 +35,6 @@ class WordDb implements IWordDb {
         }
       } else {
         // Direction U-D
-        console.log("U-D");
 
         // create list
         const list = new LinkedList();
@@ -105,6 +102,8 @@ class WordDb implements IWordDb {
 
           // old word is in Up-Down
           else if (charFound && charFound.direction == Direction.UD) {
+            console.log("sss");
+
             let listPrev = this.getSpecificList(i - 1);
             let listNext = this.getSpecificList(i - 1);
 
@@ -123,38 +122,6 @@ class WordDb implements IWordDb {
 
   getSpecificList(index: number): ILinkedList | undefined {
     return this.charLists.get(index);
-  }
-
-  printItems() {
-    let arr = [[]];
-
-    // for (let i = 0; i < 4; i++) {
-    //   let temp = [];
-    //   for (let j = 0; j < 4; j++) {
-    //     temp.push("   ");
-    //   }
-    //   arr.push(temp);
-    // }
-
-    // for (const char of this.chars) {
-    //   let coords = char[0].split("*");
-    //   let cX = Number(coords[0]);
-    //   let cY = Number(coords[1]);
-
-    //   arr[cY][cX] = ` ${char[1].char} `;
-    // }
-
-    // console.log(arr);
-
-    // for (const list of this.charLists) {
-    //   console.log(list[1]);
-    // }
-
-    // console.log(this.charLists.get(0));
-
-    console.log(this.charLists.get(0).printList());
-    // for (let i = 0; i < this.charLists.get(0).length; i++) {
-    // }
   }
 }
 

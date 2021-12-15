@@ -11,7 +11,6 @@ interface IWordDb {
   addToDb(word: string, charIndexOfNewChar?: number, oldCharData?: ICoord);
   searchCharDb(word: string, charIndex: number): boolean;
   getSpecificList(index: number): ILinkedList | undefined;
-  printItems();
 }
 
 interface ICoord {
