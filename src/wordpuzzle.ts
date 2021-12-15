@@ -4,13 +4,11 @@ import { WordDb } from "./worddb";
 
 class WordPuzzle implements IWordPuzzle {
   words: IWord[] = [];
-  selectedWord: IWord;
   wordDb: IWordDb;
 
   constructor(words: string[]) {
     this.wordDb = new WordDb();
     this.addWords(words);
-    // this.sortWordsDesc();
     this.run();
   }
 
@@ -18,10 +16,6 @@ class WordPuzzle implements IWordPuzzle {
     for (let i = 0; i < words.length; i++) {
       this.words.push(new Word(words[i]));
     }
-  }
-
-  sortWordsDesc() {
-    this.words.sort((a, b) => b.value.length - a.value.length);
   }
 
   search(word: IWord, charIndex: number) {
