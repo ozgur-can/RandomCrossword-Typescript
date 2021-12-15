@@ -1,9 +1,9 @@
 interface IWordPuzzle {
-  words: IWord[];
+  words: string[];
   wordDb: IWordDb;
-  addWords(words: string[]);
-  search(word: IWord, charIndex: number);
+  search(word: string, charIndex: number);
   run();
+  printWordTable();
 }
 
 interface IWord {
@@ -15,9 +15,11 @@ interface IWord {
 
 interface IWordDb {
   charLists: Map<number, ILinkedList>; // 0*0, { char: 'e', parent.. }
-  addToDb(word: IWord, charIndexOfNewChar?: number, oldCharData?: ICoord);
-  printItems();
+  addToDb(word: string, charIndexOfNewChar?: number, oldCharData?: ICoord);
   useChar(x: number, y: number);
+  searchCharDb(word: string, charIndex: number): boolean;
+  getSpecificList(index: number): ILinkedList | undefined;
+  printItems();
 }
 
 interface ICoord {
@@ -40,15 +42,22 @@ interface ICharNode {
   prev?: ICharNode;
   next?: ICharNode;
   value?: string;
+  index?: number;
   direction: Direction;
+  used?: boolean;
 }
 
 interface ILinkedList {
   head: ICharNode;
-  addChar(char: string, direction: Direction);
+  length: number;
+  addCharToLast(char: string, direction: Direction);
+  addCharToHead(char: string, direction: Direction);
+  addCharPrev(char: string, node: ICharNode, direction: Direction);
+  addCharNext(char: string, node: ICharNode, direction: Direction);
   addWord(word: string, direction: Direction);
-  searchChar(char: string, direction: Direction): ICharNode | undefined;
-  getLast(): ICharNode;
+  searchChar(char: string, used: boolean): ICharNode | undefined;
+  getLast(): ICharNode | undefined;
+  getCharAt(searchIndex: number): ICharNode | undefined;
   printList();
 }
 
