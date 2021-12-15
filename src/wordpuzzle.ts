@@ -39,10 +39,9 @@ class WordPuzzle implements IWordPuzzle {
 
   printWordTable() {
     let lists = this.wordDb.charLists;
-
+    
     for (let i = 0; i < lists.size; i++) {
-      let list = lists.get(i);
-      list.printList();
+      console.log(i, lists.get(i).returnList())
     }
   }
 }

@@ -35,7 +35,7 @@ enum DbAddDirection {
 
 enum Direction {
   LR,
-  UP,
+  UD,
 }
 
 interface ICharNode {
@@ -49,16 +49,16 @@ interface ICharNode {
 
 interface ILinkedList {
   head: ICharNode;
+  tail: ICharNode;
   length: number;
   addCharToLast(char: string, direction: Direction);
   addCharToHead(char: string, direction: Direction);
-  addCharPrev(char: string, node: ICharNode, direction: Direction);
-  addCharNext(char: string, node: ICharNode, direction: Direction);
   addWord(word: string, direction: Direction);
   searchChar(char: string, used: boolean): ICharNode | undefined;
   getLast(): ICharNode | undefined;
   getCharAt(searchIndex: number): ICharNode | undefined;
   printList();
+  returnList(): string;
 }
 
 export {

@@ -17,6 +17,7 @@ class CharNode implements ICharNode {
 
 class LinkedList implements ILinkedList {
   head: CharNode;
+  tail: ICharNode;
   length: number;
   constructor() {
     this.length = 0;
@@ -24,11 +25,14 @@ class LinkedList implements ILinkedList {
 
   // add char to last // > 'e'
   addCharToLast(char: string, direction: Direction) {
-    if (!this.head) {
+    if (!this.head && !this.tail) {
       this.head = new CharNode(char, 0, direction);
+      this.tail = this.head;
+      this.length++;
     } else {
       // current last
-      let last: ICharNode = this.getLast();
+      // let last: ICharNode = this.getLast();
+      let last = this.tail;
 
       // new char object
       let node = new CharNode(char, last.index + 1, direction);
@@ -36,14 +40,18 @@ class LinkedList implements ILinkedList {
       // add new to next of last char
       last.next = node;
       node.prev = last;
+      // set tail
+      this.tail = node;
       // update length
       this.length++;
     }
   }
 
   addCharToHead(char: string, direction: Direction) {
-    if (!this.head) {
+    if (!this.head && !this.tail) {
       this.head = new CharNode(char, 0, direction);
+      this.tail = this.head;
+      this.length++;
     } else {
       // current head
       let currentHead = this.head;
@@ -59,31 +67,9 @@ class LinkedList implements ILinkedList {
       currentHead.prev = newHead;
       newHead.next = currentHead;
       this.head = newHead;
+      //update length
+      this.length++;
     }
-  }
-
-  addCharPrev(char: string, node: ICharNode, direction: Direction) {
-    // create prev node
-    let prevNode: ICharNode = new CharNode(char, node.index - 1, direction);
-
-    // set prev and next
-    node.prev = prevNode;
-    prevNode.next = node;
-
-    // update length
-    this.length++;
-  }
-
-  addCharNext(char: string, node: ICharNode, direction: Direction) {
-    // create next node
-    let nextNode: ICharNode = new CharNode(char, node.index + 1, direction);
-
-    // set prev and next
-    node.next = nextNode;
-    nextNode.prev = node;
-
-    // update length
-    this.length++;
   }
 
   // add word to last // > 'east'
@@ -155,13 +141,31 @@ class LinkedList implements ILinkedList {
 
     while (current.next !== undefined) {
       line += current.value;
-      // console.log(current.value);
       current = current.next;
     }
 
     line += current.value;
 
     console.log(line);
+  }
+
+  // return all nodes
+  returnList(): string {
+    let line = "";
+    let current = this.head;
+
+    while (current.prev !== undefined) {
+      current = current.prev;
+    }
+
+    while (current.next !== undefined) {
+      line += current.value;
+      current = current.next;
+    }
+
+    line += current.value;
+
+    return line;
   }
 }
 

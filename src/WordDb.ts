@@ -45,7 +45,7 @@ class WordDb implements IWordDb {
         const list = new LinkedList();
 
         // add word in LR dir
-        list.addCharToLast(word, Direction.UP);
+        list.addCharToLast(word, Direction.UD);
 
         // add list to db
         this.charLists.set(0, list);
@@ -93,20 +93,21 @@ class WordDb implements IWordDb {
               j < charFound.index - charIndex + word.length, t < word.length;
               j++, t++
             ) {
-              let currentChar = word[t];
 
               if (charFound.index == j) {
                 continue;
               } else {
                 // console.log(i, j, currentChar, charFound.value);
                 if (charFound.index > j) {
+                  let currentChar = word[- 1 - j];
                   // add to head
-                  listFound.addCharToHead(currentChar, Direction.UP);
+                  listFound.addCharToHead(currentChar, Direction.UD);
                 }
 
                 if (charFound.index < j) {
+                  let currentChar = word[t];
                   // add to last
-                  listFound.addCharToLast(currentChar, Direction.UP);
+                  listFound.addCharToLast(currentChar, Direction.UD);
                 }
               }
               // add downward
@@ -124,7 +125,7 @@ class WordDb implements IWordDb {
           }
 
           // old word is in Up-Down
-          else if (charFound.direction == Direction.UP) {
+          else if (charFound.direction == Direction.UD) {
             let listPrev = this.getSpecificList(i - 1);
             let listNext = this.getSpecificList(i - 1);
 
