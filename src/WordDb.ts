@@ -87,6 +87,8 @@ class WordDb implements IWordDb {
 
         // char found && Left-Right
         if (charFound && charFound.direction == Direction.LR) {
+          // char used > true
+          charFound.used = true;
           if (charFound.direction == Direction.LR) {
             for (
               let j = charFound.index - charIndex, t = 0;
