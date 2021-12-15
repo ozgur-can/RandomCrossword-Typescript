@@ -4,6 +4,7 @@ class CharNode implements ICharNode {
   prev?: ICharNode;
   next?: ICharNode;
   value?: string;
+  direction: Direction;
   constructor(char: string) {
     this.value = char;
   }
@@ -14,7 +15,7 @@ class LinkedList implements ILinkedList {
   constructor() {}
 
   // add char to last // > 'e'
-  addChar(char: string) {
+  addChar(char: string, direction: Direction) {
     if (!this.head) {
       this.head = new CharNode(char);
     } else {
@@ -31,10 +32,31 @@ class LinkedList implements ILinkedList {
   }
 
   // add word to last // > 'east'
-  addWord(word: string) {
+  addWord(word: string, direction: Direction) {
     for (let i = 0; i < word.length; i++) {
-      this.addChar(word[i]);
+      this.addChar(word[i], direction);
     }
+  }
+
+  searchChar(char: string, direction: Direction): ICharNode {
+    // first
+    let current = this.head;
+
+    if (current.value == char) {
+      // found
+      return current;
+    } else
+      while (current.next !== undefined) {
+        // move next
+        current = current.next;
+        // check again
+        if (current.value == char) {
+          return current;
+        }
+      }
+
+    // not found
+    return undefined;
   }
 
   // get last node

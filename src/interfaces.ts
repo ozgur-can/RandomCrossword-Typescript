@@ -40,12 +40,14 @@ interface ICharNode {
   prev?: ICharNode;
   next?: ICharNode;
   value?: string;
+  direction: Direction;
 }
 
 interface ILinkedList {
   head: ICharNode;
-  addChar(char: string);
-  addWord(word: string);
+  addChar(char: string, direction: Direction);
+  addWord(word: string, direction: Direction);
+  searchChar(char: string, direction: Direction): ICharNode | undefined;
   getLast(): ICharNode;
   printList();
 }
