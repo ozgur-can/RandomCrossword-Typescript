@@ -1,5 +1,4 @@
-import { ICharNode, ICoord, IWord, IWordDb, IWordPuzzle } from "./interfaces";
-import { Word } from "./word";
+import { IWordDb, IWordPuzzle } from "./interfaces";
 import { WordDb } from "./worddb";
 
 class WordPuzzle implements IWordPuzzle {
@@ -32,16 +31,16 @@ class WordPuzzle implements IWordPuzzle {
       if (i == 0) {
         this.wordDb.addToDb(this.words[i]);
       } else {
-        this.search(this.words[i], 0);
+        this.search(this.words[i], i);
       }
     }
   }
 
   printWordTable() {
     let lists = this.wordDb.charLists;
-    
+
     for (let i = 0; i < lists.size; i++) {
-      console.log(i, lists.get(i).returnList())
+      console.log(i, lists.get(i).returnList());
     }
   }
 }

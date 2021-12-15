@@ -1,13 +1,11 @@
 import {
   DbAddDirection,
   Direction,
-  ICharNode,
   ICoord,
   ILinkedList,
-  IWord,
   IWordDb,
 } from "./interfaces";
-import { CharNode, LinkedList } from "./linkedlist";
+import { LinkedList } from "./linkedlist";
 
 class WordDb implements IWordDb {
   charLists: Map<number, ILinkedList>;
@@ -60,16 +58,6 @@ class WordDb implements IWordDb {
       // old U-D, new L-R
       if (oldCharData.direction == DbAddDirection.upToDown) {
       }
-    }
-  }
-
-  useChar(x: number, y: number) {
-    // let char = this.chars.get(`${x}*${y}`);
-    let char;
-
-    if (char) {
-      // remove the used existing char from db
-      char.parent.useChar(char.char);
     }
   }
 

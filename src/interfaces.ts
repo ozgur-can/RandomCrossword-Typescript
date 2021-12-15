@@ -6,17 +6,9 @@ interface IWordPuzzle {
   printWordTable();
 }
 
-interface IWord {
-  value: string;
-  unusedChars: string[];
-  checkCharUnused(charIndex: number): boolean;
-  useChar(char: string);
-}
-
 interface IWordDb {
   charLists: Map<number, ILinkedList>; // 0*0, { char: 'e', parent.. }
   addToDb(word: string, charIndexOfNewChar?: number, oldCharData?: ICoord);
-  useChar(x: number, y: number);
   searchCharDb(word: string, charIndex: number): boolean;
   getSpecificList(index: number): ILinkedList | undefined;
   printItems();
@@ -63,7 +55,6 @@ interface ILinkedList {
 
 export {
   IWordPuzzle,
-  IWord,
   IWordDb,
   DbAddDirection,
   ICoord,
