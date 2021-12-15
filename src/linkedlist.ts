@@ -5,8 +5,9 @@ class CharNode implements ICharNode {
   next?: ICharNode;
   value?: string;
   direction: Direction;
-  constructor(char: string) {
+  constructor(char: string, direction: Direction) {
     this.value = char;
+    this.direction = direction
   }
 }
 
@@ -17,13 +18,13 @@ class LinkedList implements ILinkedList {
   // add char to last // > 'e'
   addChar(char: string, direction: Direction) {
     if (!this.head) {
-      this.head = new CharNode(char);
+      this.head = new CharNode(char, direction);
     } else {
       // current last
       let last: ICharNode = this.getLast();
 
       // new char object
-      let node = new CharNode(char);
+      let node = new CharNode(char, direction);
 
       // add new to next of last char
       last.next = node;
@@ -42,7 +43,7 @@ class LinkedList implements ILinkedList {
     // first
     let current = this.head;
 
-    if (current.value == char) {
+    if (current.value == char && current.direction == direction) {
       // found
       return current;
     } else
@@ -50,7 +51,7 @@ class LinkedList implements ILinkedList {
         // move next
         current = current.next;
         // check again
-        if (current.value == char) {
+        if (current.value == char && current.direction == direction) {
           return current;
         }
       }
