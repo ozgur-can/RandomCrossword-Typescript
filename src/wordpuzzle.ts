@@ -1,6 +1,6 @@
 import { ICoord, IWord, IWordDb, IWordPuzzle } from "./interfaces";
 import { Word } from "./word";
-import { WordDb } from "./WordDb";
+import { WordDb } from "./worddb";
 
 class WordPuzzle implements IWordPuzzle {
   words: IWord[] = [];

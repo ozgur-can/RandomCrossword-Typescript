@@ -46,4 +46,9 @@ enum DbAddDirection {
   upToDown,
 }
 
-export { IWordPuzzle, IWord, IWordDb, DbAddDirection, IWordDbObject, ICoord };
+enum Direction {
+  LR,
+  UP,
+}
+
+export { IWordPuzzle, IWord, IWordDb, DbAddDirection, IWordDbObject, ICoord, Direction };
