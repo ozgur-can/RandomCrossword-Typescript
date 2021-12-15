@@ -17,11 +17,13 @@ interface IWord {
 
 interface IWordDb {
   chars: Map<string, IWordDbObject>; // 0*0, { char: 'e', parent.. }
+  wordCount: number;
   addToDb(word: IWord, charIndexOfNewChar?: number, oldCharData?: ICoord);
   addLeftToRight(word: IWord, x: number, y: number, charIndexOfNewChar?: number);
   addUpToDown(word: IWord, x: number, y: number, charIndexOfNewChar?: number);
   checkCoordEmpty(x: number, y: number): boolean;
-  existSameChar(char: string): boolean | ICoord; // search same unused char
+  checkCoordEmptyLoop(x: number, y: number, wordLength: number, direction: DbAddDirection): boolean;
+  existSameChar(char: string, wordLength: number): boolean | ICoord; // search same unused char
   areAdjacentCharsUnused(word: IWord, char: string): boolean;
   printItems();
   useChar(x: number, y: number);

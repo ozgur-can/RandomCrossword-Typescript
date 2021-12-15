@@ -8,8 +8,10 @@ import {
 
 class WordDb implements IWordDb {
   chars: Map<string, IWordDbObject>;
+  wordCount: number;
   constructor() {
     this.chars = new Map();
+    this.wordCount = 0;
   }
   addToDb(word: IWord, charIndexOfNewChar: number, oldCharData: ICoord) {
     // db is empty
@@ -49,22 +51,31 @@ class WordDb implements IWordDb {
   }
 
   addUpToDown(word: IWord, x: number, y: number, charIndexOfNewChar?: number) {   
+    let isAdded = false;
+
     if(typeof charIndexOfNewChar !== "undefined"){
       for (let i = y - charIndexOfNewChar, j = 0; j < word.value.length, i < y - charIndexOfNewChar + word.value.length; i++, j++) {        
         if (!this.checkCoordEmpty(x, i)) {
           continue;
-        } else {        
+        } else {      
+          // if(!this.checkCoordEmpty(x - 1, i) || (!this.checkCoordEmpty(x + 1, i))){
+          //   break;
+          // }
           this.chars.set(`${x}*${i}`, {
             char: word.value[j],
             parent: word,
             direction: DbAddDirection.upToDown,
           });
+          isAdded = true;
         }
       }
 
-      // update unused char of word
-      word.useChar(word.value[charIndexOfNewChar]);
-      this.useChar(x, y);
+      if(isAdded){
+        // update unused char of word
+        word.useChar(word.value[charIndexOfNewChar]);
+        this.useChar(x, y);
+        this.wordCount++;
+      }
 
     }
     else {
@@ -80,22 +91,30 @@ class WordDb implements IWordDb {
   }
 
   addLeftToRight(word: IWord, x: number, y: number, charIndexOfNewChar?: number) {
+    let isAdded = false;
     if (typeof charIndexOfNewChar !== "undefined") {
       for (let i = x - charIndexOfNewChar, j = 0; j < word.value.length, i < x - charIndexOfNewChar + word.value.length; i++, j++) {
         if (!this.checkCoordEmpty(i, y)) {
           continue;
         } else {
+          // if(!this.checkCoordEmpty(i, y - 1) || (!this.checkCoordEmpty(i, y - 2))){
+          //   break;
+          // }
           this.chars.set(`${i}*${y}`, {
             char: word.value[j],
             parent: word,
             direction: DbAddDirection.leftToRight,
           });
+          isAdded = true;
         }
       }
 
-      // update unused char of word
-      word.useChar(word.value[charIndexOfNewChar]);
-      this.useChar(x, y);
+      if(isAdded){
+        // update unused char of word
+        word.useChar(word.value[charIndexOfNewChar]);
+        this.useChar(x, y);
+        this.wordCount++;
+      }
       
     } else {
       for (let i = x; i < word.value.length; i++) {
@@ -112,20 +131,47 @@ class WordDb implements IWordDb {
     return !this.chars.has(`${x}*${y}`);
   }
 
-  existSameChar(charToSearch: string): boolean | ICoord {
+  checkCoordEmptyLoop(x: number, y: number, wordLength: number, direction: DbAddDirection): boolean {
+      let result = false;
+
+      if(direction == DbAddDirection.leftToRight){
+        for (let i = x - 1; i < wordLength + 1; i++) {
+          if(!this.checkCoordEmpty(i, y)){
+            result = true;
+            break;
+          }
+        }
+      }
+
+      if(direction == DbAddDirection.upToDown){
+        for (let i = y - 1; i < wordLength + 1; i++) {
+          if(!this.checkCoordEmpty(x, i)){
+            result = true;
+            break;
+          }
+        }
+      }
+
+      return result;
+  }
+
+  existSameChar(charToSearch: string, wordLength: number): boolean | ICoord {
     let exist: boolean | ICoord = false;
 
     for (const char of this.chars) {
       let charCoord = char[0].split("*"); // 2*0 > `2`, `0`
       let wordObject = char[1]; // char, parent, direction
       let unusedCharIndex = wordObject.parent.unusedChars.indexOf(charToSearch);
-      
-      if (charToSearch == wordObject.char && unusedCharIndex != -1 && this.areAdjacentCharsUnused(wordObject.parent, charToSearch)) {
-        exist = {
-          x: Number(charCoord[0]),
-          y: Number(charCoord[1]),
-          direction: char[1].direction,
-        };
+
+      if (charToSearch == wordObject.char && unusedCharIndex != -1 && this.areAdjacentCharsUnused(wordObject.parent, charToSearch)) {       
+        let x = Number(charCoord[0]);
+        let y = Number(charCoord[1]);
+        let direction = wordObject.direction;
+
+        let chk = this.checkCoordEmptyLoop(x, y, wordLength, direction);
+        
+        if(chk)
+          exist = { x, y, direction };
         break;
       }
     }
@@ -171,7 +217,7 @@ class WordDb implements IWordDb {
     // console.log(arr);
     
     for (const char of this.chars) {
-      console.log(char);
+      console.log(char[0], char[1]);
     }
   }
 
