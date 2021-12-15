@@ -82,50 +82,39 @@ class WordDb implements IWordDb {
 
       // list found
       if (listFound) {
+        // char found
         let charFound = listFound.searchChar(charToAdd, false);
 
-        // char found
-        if (charFound) {
-          // old word is in Left-Right
+        // char found && Left-Right
+        if (charFound && charFound.direction == Direction.LR) {
           if (charFound.direction == Direction.LR) {
             for (
               let j = charFound.index - charIndex, t = 0;
               j < charFound.index - charIndex + word.length, t < word.length;
               j++, t++
             ) {
-
               if (charFound.index == j) {
                 continue;
               } else {
-                // console.log(i, j, currentChar, charFound.value);
+                // add downward
                 if (charFound.index > j) {
-                  let currentChar = word[- 1 - j];
+                  let currentChar = word[-1 - j];
                   // add to head
                   listFound.addCharToHead(currentChar, Direction.UD);
                 }
 
+                // add upward
                 if (charFound.index < j) {
                   let currentChar = word[t];
                   // add to last
                   listFound.addCharToLast(currentChar, Direction.UD);
                 }
               }
-              // add downward
-              // if(charFound.index < j){
-              //   // console.log('ekle', curChar);
-              //   // listFound.addCharNext(currentChar, charFound, Direction.UP);\
-              //   listFound.addCharGivenIndex(j, currentChar, Direction.UP);
-              // }
-              // // add upward
-              // else if(charFound.index > j) {
-              //   // console.log('ekle2', curChar);
-              //   // listFound.addCharPrev(currentChar, charFound, Direction.UP);
-              // }
             }
           }
 
           // old word is in Up-Down
-          else if (charFound.direction == Direction.UD) {
+          else if (charFound && charFound.direction == Direction.UD) {
             let listPrev = this.getSpecificList(i - 1);
             let listNext = this.getSpecificList(i - 1);
 
