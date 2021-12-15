@@ -26,7 +26,8 @@ class WordPuzzle implements IWordPuzzle {
 
   search(word: IWord, charIndex: number) {
     // check char is exist & same & unused in db
-    let exist: boolean | ICoord = this.wordDb.existSameChar(word.value[charIndex], word.value.length);
+    // let exist: boolean | ICoord = this.wordDb.existSameChar(word.value[charIndex], word.value.length);
+    let exist;
 
     // add this word to db
     if (exist != false) {
