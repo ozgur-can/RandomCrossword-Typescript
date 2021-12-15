@@ -44,7 +44,8 @@ interface ICharNode {
 
 interface ILinkedList {
   head: ICharNode;
-  addToLast(char: string);
+  addChar(char: string);
+  addWord(word: string);
   getLast(): ICharNode;
   printList();
 }
