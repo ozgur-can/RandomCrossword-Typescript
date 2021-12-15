@@ -100,18 +100,6 @@ class LinkedList implements ILinkedList {
     return undefined;
   }
 
-  // get last node
-  getLast(): ICharNode | undefined {
-    // first
-    let current = this.head;
-
-    // go to end of list
-    while (current.next !== undefined) current = current.next;
-
-    // last
-    return current;
-  }
-
   getCharAt(searchIndex: number): ICharNode | undefined {
     // first
     let current = this.head;

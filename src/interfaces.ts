@@ -47,7 +47,6 @@ interface ILinkedList {
   addCharToHead(char: string, direction: Direction);
   addWord(word: string, direction: Direction);
   searchChar(char: string, used: boolean): ICharNode | undefined;
-  getLast(): ICharNode | undefined;
   getCharAt(searchIndex: number): ICharNode | undefined;
   printList();
   returnList(): string;
