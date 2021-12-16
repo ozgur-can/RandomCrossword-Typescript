@@ -59,75 +59,92 @@ class WordDb implements IWordDb {
     }
   }
 
-  searchCharDb(word: string, charIndex: number): boolean {
-    const charToAdd: string = word[charIndex];
-    // search every list
-    for (let i = 0; i < this.charLists.size; i++) {
-      // current list
-      let listFound = this.charLists.get(i);
+  searchAndAddToDb(word: string, charIndex: number): boolean {
+    // result check
+    let isAdded = false;
+    const charToSearch: string = word[charIndex];
 
-      // list found
-      if (listFound) {
-        // char found
-        let charFound = listFound.searchChar(charToAdd, false);
+    // run if lists found
+    if (this.charLists.size > 0) {
+      // search every list
+      for (let i = 0; i < this.charLists.size; i++) {
+        // current list
+        let listFound = this.charLists.get(i);
 
-        // char found && Left-Right
-        if (charFound && charFound.direction == Direction.LR) {
-          // char used > true
-          charFound.used = true;
-          for (
-            let j = charFound.index - charIndex, t = 0;
-            j < charFound.index - charIndex + word.length, t < word.length;
-            j++, t++
-          ) {
-            if (charFound.index == j) {
-              continue;
-            } else {
-              // add downward
-              if (charFound.index > j) {
-                let currentChar = word[-1 - j];
-                // add to head
-                listFound.addCharToHead(currentChar, Direction.UD);
-              }
+        // list found
+        if (listFound) {
+          // char found
+          let charFound = listFound.searchChar(charToSearch, false);
 
-              // add upward
-              if (charFound.index < j) {
-                let currentChar = word[t];
-                // add to last
-                listFound.addCharToLast(currentChar, Direction.UD);
+          // char found && Left-Right
+          if (charFound && charFound.direction == Direction.LR) {
+            for (
+              let j = charFound.index - charIndex, t = 0;
+              j < charFound.index - charIndex + word.length, t < word.length;
+              j++, t++
+            ) {
+              if (charFound.index == j) {
+                continue;
+              } else {
+                // add downward
+                if (charFound.index > j) {
+                  let currentChar = word[-1 - j];
+                  // add to head
+                  listFound.addCharToHead(currentChar, Direction.UD);
+                }
+
+                // add upward
+                if (charFound.index < j) {
+                  let currentChar = word[t];
+                  // add to last
+                  listFound.addCharToLast(currentChar, Direction.UD);
+                }
               }
             }
+            // update added status
+            isAdded = true;
+            // char used > true
+            charFound.used = true;
           }
-        }
 
-        // old word is in Up-Down
-        else if (charFound && charFound.direction == Direction.UD) {
-          for (
-            let j = i - charIndex, t = 0;
-            j < i - charIndex + word.length, t < word.length;
-            j++, t++
-          ) {
-            if (j == i) {
-              continue;
-            } else {
-              // add to list
-              // console.log(j, charFound.index, word[j]);
-              this.addToIndex(j, charFound.index, word[j], Direction.LR);
+          // old word is in Up-Down
+          else if (charFound && charFound.direction == Direction.UD) {
+            for (
+              let j = i - charIndex, t = 0;
+              j < i - charIndex + word.length, t < word.length;
+              j++, t++
+            ) {
+              if (j == i) {
+                continue;
+              } else {
+                // add to list
+                // console.log(j, charFound.index, word[j]);
+                this.addToIndex(j, charFound.index, word[j], Direction.LR);
+              }
             }
+            // update added status
+            isAdded = true;
+            // char used > true
+            charFound.used = true;
           }
         }
       }
     }
 
-    return;
+    return isAdded;
   }
 
-  addToIndex(listIndex: number, charIndex: number, char: string, direction: Direction) {
+  addToIndex(
+    listIndex: number,
+    charIndex: number,
+    char: string,
+    direction: Direction
+  ) {
     // get list
     let list = this.charLists.get(listIndex);
 
     // list not found
-    if(!list){
+    if (!list) {
       // create new list if not found
       this.charLists.set(listIndex, new LinkedList());
       // add char to new list

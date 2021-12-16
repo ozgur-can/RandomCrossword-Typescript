@@ -9,7 +9,7 @@ interface IWordPuzzle {
 interface IWordDb {
   charLists: Map<number, ILinkedList>; // 0*0, { char: 'e', parent.. }
   addToDb(word: string, charIndexOfNewChar?: number, oldCharData?: ICoord);
-  searchCharDb(word: string, charIndex: number): boolean;
+  searchAndAddToDb(word: string, charIndex: number): boolean;
   addToIndex(listIndex: number, charIndex: number, char: string, direction: Direction);
   getList(index: number): ILinkedList | undefined;
   getChar(listIndex: number, charIndex: number): ICharNode | undefined; 

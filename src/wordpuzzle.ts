@@ -13,17 +13,14 @@ class WordPuzzle implements IWordPuzzle {
 
   search(word: string, charIndex: number) {
     // check char is exist & same & unused in db
-    let exist: boolean = this.wordDb.searchCharDb(word, charIndex);
-    // console.log(exist);
+    let wordAdded: boolean = this.wordDb.searchAndAddToDb(word, charIndex);
 
-    // add this word to db
-    // if (exist) {
-    //   // this.wordDb.addToDb(word, charIndex, exist as ICoord);
-    // } else {
-    //   if (charIndex < word.length - 1) {
-    //     return this.search(word, charIndex + 1);
-    //   }
-    // }
+    // search next char for this word
+    if (!wordAdded) {
+      if (charIndex < word.length - 1) return this.search(word, charIndex + 1);
+    }
+    // word added
+    else return;
   }
 
   run() {
@@ -31,7 +28,7 @@ class WordPuzzle implements IWordPuzzle {
       if (i == 0) {
         this.wordDb.addToDb(this.words[i]);
       } else {
-        this.search(this.words[i], i);
+        this.search(this.words[i], 0);
       }
     }
   }
