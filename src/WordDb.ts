@@ -20,7 +20,7 @@ class WordDb implements IWordDb {
       // add first word L-R / U-D randomly
       let random = Math.random();
 
-      if (random > 0) {
+      if (random < 0) {
         // Direction L-R
 
         for (let i = 0; i < word.length; i++) {
@@ -40,7 +40,7 @@ class WordDb implements IWordDb {
         const list = new LinkedList();
 
         // add word in LR dir
-        list.addCharToLast(word, Direction.UD);
+        list.addWord(word, Direction.UD);
 
         // add list to db
         this.charLists.set(0, list);
@@ -74,46 +74,43 @@ class WordDb implements IWordDb {
         if (charFound && charFound.direction == Direction.LR) {
           // char used > true
           charFound.used = true;
-          if (charFound.direction == Direction.LR) {
-            for (
-              let j = charFound.index - charIndex, t = 0;
-              j < charFound.index - charIndex + word.length, t < word.length;
-              j++, t++
-            ) {
-              if (charFound.index == j) {
-                continue;
-              } else {
-                // add downward
-                if (charFound.index > j) {
-                  let currentChar = word[-1 - j];
-                  // add to head
-                  listFound.addCharToHead(currentChar, Direction.UD);
-                }
+          for (
+            let j = charFound.index - charIndex, t = 0;
+            j < charFound.index - charIndex + word.length, t < word.length;
+            j++, t++
+          ) {
+            if (charFound.index == j) {
+              continue;
+            } else {
+              // add downward
+              if (charFound.index > j) {
+                let currentChar = word[-1 - j];
+                // add to head
+                listFound.addCharToHead(currentChar, Direction.UD);
+              }
 
-                // add upward
-                if (charFound.index < j) {
-                  let currentChar = word[t];
-                  // add to last
-                  listFound.addCharToLast(currentChar, Direction.UD);
-                }
+              // add upward
+              if (charFound.index < j) {
+                let currentChar = word[t];
+                // add to last
+                listFound.addCharToLast(currentChar, Direction.UD);
               }
             }
           }
+        }
 
-          // old word is in Up-Down
-          else if (charFound && charFound.direction == Direction.UD) {
-            console.log("sss");
+        // old word is in Up-Down
+        else if (charFound && charFound.direction == Direction.UD) {
 
-            let listPrev = this.getSpecificList(i - 1);
-            let listNext = this.getSpecificList(i - 1);
+          let listPrev = this.getSpecificList(i - 1);
+          let listNext = this.getSpecificList(i + 1);
 
-            if (listPrev && listPrev.getCharAt(charFound.index)) {
-              return false;
-            } else if (listNext && listNext.getCharAt(charFound.index)) {
-              return false;
-            } else {
-              return true;
-            }
+          if (listPrev && listPrev.getCharAt(charFound.index)) {
+            return false;
+          } else if (listNext && listNext.getCharAt(charFound.index)) {
+            return false;
+          } else {
+            return true;
           }
         }
       }

@@ -74,9 +74,13 @@ class LinkedList implements ILinkedList {
 
   // add word to last // > 'east'
   addWord(word: string, direction: Direction) {
-    for (let i = 0; i < word.length; i++) {
-      this.addCharToLast(word[i], direction);
-    }
+    if (direction == Direction.UD)
+      for (let i = 0; i < word.length; i++) {
+        this.addCharToLast(word[i], direction);
+      }
+      else {
+        console.log("!!! word cannot add L-R dir !!!");
+      }
   }
 
   searchChar(char: string, used: boolean): ICharNode | undefined {
@@ -101,21 +105,25 @@ class LinkedList implements ILinkedList {
   }
 
   getCharAt(searchIndex: number): ICharNode | undefined {
-    // first
-    let current = this.head;
+    // last
+    let current = this.tail;
 
-    if (searchIndex < 0 || searchIndex < current.index) {
-      // go to prev
-      for (let i = current.index; i > searchIndex; i--) current = current.prev;
-      return current;
-    } else if (searchIndex > current.index) {
-      // go to next
-      for (let i = searchIndex; i < current.index; i++) current = current.next;
-      return current;
-    } else {
-      // return
-      return current;
+    // go prev until found
+    while(current.prev !== undefined){
+      // found > exit 
+      if(searchIndex == current.index)
+        break;
+      else
+      // go prev
+        current = current.prev;
     }
+
+    // current now head, index found?
+    if(searchIndex == current.index)
+      return current;
+    else
+    // not found
+      return undefined;
   }
 
   // print all nodes
