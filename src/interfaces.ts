@@ -10,7 +10,9 @@ interface IWordDb {
   charLists: Map<number, ILinkedList>; // 0*0, { char: 'e', parent.. }
   addToDb(word: string, charIndexOfNewChar?: number, oldCharData?: ICoord);
   searchCharDb(word: string, charIndex: number): boolean;
-  getSpecificList(index: number): ILinkedList | undefined;
+  addToIndex(listIndex: number, charIndex: number, char: string, direction: Direction);
+  getList(index: number): ILinkedList | undefined;
+  getChar(listIndex: number, charIndex: number): ICharNode | undefined; 
 }
 
 interface ICoord {
@@ -27,6 +29,7 @@ enum DbAddDirection {
 enum Direction {
   LR,
   UD,
+  None
 }
 
 interface ICharNode {
@@ -45,6 +48,7 @@ interface ILinkedList {
   addCharToLast(char: string, direction: Direction);
   addCharToHead(char: string, direction: Direction);
   addWord(word: string, direction: Direction);
+  addToIndex(index: number, char: string, direction: Direction);
   searchChar(char: string, used: boolean): ICharNode | undefined;
   getCharAt(searchIndex: number): ICharNode | undefined;
   printList();

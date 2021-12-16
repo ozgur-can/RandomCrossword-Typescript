@@ -1,6 +1,7 @@
 import {
   DbAddDirection,
   Direction,
+  ICharNode,
   ICoord,
   ILinkedList,
   IWordDb,
@@ -101,24 +102,51 @@ class WordDb implements IWordDb {
 
         // old word is in Up-Down
         else if (charFound && charFound.direction == Direction.UD) {
-
-          let listPrev = this.getSpecificList(i - 1);
-          let listNext = this.getSpecificList(i + 1);
-
-          if (listPrev && listPrev.getCharAt(charFound.index)) {
-            return false;
-          } else if (listNext && listNext.getCharAt(charFound.index)) {
-            return false;
-          } else {
-            return true;
+          for (
+            let j = i - charIndex, t = 0;
+            j < i - charIndex + word.length, t < word.length;
+            j++, t++
+          ) {
+            if (j == i) {
+              continue;
+            } else {
+              // add to list
+              // console.log(j, charFound.index, word[j]);
+              this.addToIndex(j, charFound.index, word[j], Direction.LR);
+            }
           }
         }
       }
     }
+
+    return;
   }
 
-  getSpecificList(index: number): ILinkedList | undefined {
+  addToIndex(listIndex: number, charIndex: number, char: string, direction: Direction) {
+    // get list
+    let list = this.charLists.get(listIndex);
+
+    // list not found
+    if(!list){
+      // create new list if not found
+      this.charLists.set(listIndex, new LinkedList());
+      // add char to new list
+      this.addToIndex(listIndex, charIndex, char, direction);
+    } else {
+      // add char to list
+      list.addToIndex(charIndex, char, direction);
+    }
+  }
+
+  getList(index: number): ILinkedList | undefined {
     return this.charLists.get(index);
+  }
+
+  getChar(listIndex: number, charIndex: number): ICharNode | undefined {
+    // return (x, y) char if exist
+    if (this.charLists.has(listIndex)) {
+      return this.charLists.get(listIndex).getCharAt(charIndex);
+    } else return undefined;
   }
 }
 

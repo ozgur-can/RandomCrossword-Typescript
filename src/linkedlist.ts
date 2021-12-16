@@ -78,9 +78,33 @@ class LinkedList implements ILinkedList {
       for (let i = 0; i < word.length; i++) {
         this.addCharToLast(word[i], direction);
       }
-      else {
-        console.log("!!! word cannot add L-R dir !!!");
+    else {
+      console.log("!!! word cannot add L-R dir !!!");
+    }
+  }
+
+  addToIndex(index: number, char: string, direction: Direction) {
+    if (index < 0) {
+      for (let i = 0; i < index; i--) {
+        // add empty char
+        this.addCharToHead("", Direction.None);
       }
+      // add new char
+      this.addCharToHead(char, direction);
+    }
+
+    if (index > 0)
+      for (let i = 0; i < index; i++) {
+        // add empty string
+        this.addCharToLast("", direction);
+      }
+    // add new char
+    this.addCharToLast(char, direction);
+
+    if (index == 0) {
+      // add last or head
+      this.addCharToLast(char, direction);
+    }
   }
 
   searchChar(char: string, used: boolean): ICharNode | undefined {
@@ -109,21 +133,17 @@ class LinkedList implements ILinkedList {
     let current = this.tail;
 
     // go prev until found
-    while(current.prev !== undefined){
-      // found > exit 
-      if(searchIndex == current.index)
-        break;
-      else
+    while (current.prev !== undefined) {
+      // found > exit
+      if (searchIndex == current.index) break;
       // go prev
-        current = current.prev;
+      else current = current.prev;
     }
 
     // current now head, index found?
-    if(searchIndex == current.index)
-      return current;
-    else
+    if (searchIndex == current.index) return current;
     // not found
-      return undefined;
+    else return undefined;
   }
 
   // print all nodes
