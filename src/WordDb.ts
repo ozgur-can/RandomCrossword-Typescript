@@ -21,7 +21,7 @@ class WordDb implements IWordDb {
       // add first word L-R / U-D randomly
       let random = Math.random();
 
-      if (random < 0) {
+      if (random > 0) {
         // Direction L-R
 
         for (let i = 0; i < word.length; i++) {
@@ -119,7 +119,7 @@ class WordDb implements IWordDb {
               } else {
                 // add to list
                 // console.log(j, charFound.index, word[j]);
-                this.addToIndex(j, charFound.index, word[j], Direction.LR);
+                this.addToIndex(j, charFound.index, word[t], Direction.LR);
               }
             }
             // update added status
@@ -176,22 +176,20 @@ class WordDb implements IWordDb {
 
     let lines: IChar[][] = [];
 
-    for (let i = 0; i < this.charLists.size; i++) {
-      if (this.charLists.has(i)) {
-        let line: IChar[] = [];
-        headIndex = this.charLists.get(i).head.index;
-        tailIndex = this.charLists.get(i).tail.index;
+    this.charLists.forEach((list, i) => {
+      let line: IChar[] = [];
+      headIndex = list.head.index;
+      tailIndex = list.tail.index;
 
-        for (let j = headIndex; j <= tailIndex; j++) {
-          let current = this.charLists.get(i).getCharAt(j);
-          if (current) {
-            let char: IChar = { value: current.value, x: i, y: j };
-            line.push(char);
-          }
+      for (let j = headIndex; j <= tailIndex; j++) {
+        let current = list.getCharAt(j);
+        if (current) {
+          let char: IChar = { value: current.value, x: i, y: j };
+          line.push(char);
         }
-        lines.push(line);
       }
-    }
+      lines.push(line);
+    });
 
     console.log(lines);
   }
