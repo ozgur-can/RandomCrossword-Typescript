@@ -89,10 +89,13 @@ class LinkedList implements ILinkedList {
 
     if (!head && !tail) {
       if (index == 0) {
+        // create head & tail
         this.createHeadTail(index, char, direction);
       } else {
+        // create head & tail
         this.createHeadTail();
 
+        // head & tail
         let head = this.head;
         let tail = this.tail;
 
@@ -113,28 +116,58 @@ class LinkedList implements ILinkedList {
         }
       }
     } else {
-      if (index < head.index) {
-        for (let i = 0; i < index; i--) {
+
+      // if index equals head's index
+      if(index == head.index){
+        head.value = char;
+      }
+
+      // if index smaller than head index
+      else if (index < head.index) {
+        for (let i = 0; i > index + 1; i--) {
           // add empty char
           this.addCharToHead("", Direction.None);
         }
         // add new char
         this.addCharToHead(char, direction);
-      } else if (index > head.index && index < tail.index) {
-        for (let i = head.index; i < index; i++) {
-          // add empty char
-          this.addCharToLast("", Direction.None);
+      }
+
+      // if index is between head and tail
+      else if (index > head.index && index < tail.index) {
+        // head
+        let current = head;
+
+        // loop to index
+        while (current.next != undefined && current.index != index)
+          current = current.next;
+
+        // reached to index
+        if (current.index == index) {
+          let charFound = this.getCharAt(index);
+
+          // check this char is proper to update
+          if (charFound.value == "" && charFound.used == false) {
+            // set char
+            charFound.value = char;
+          }
         }
-        // add new char
-        this.addCharToLast(char, direction);
-      } else if (index > tail.index) {
-        for (let i = tail.index; i < index; i++) {
+      }
+
+      // if index equals tail's index
+      if(index == tail.index){
+        tail.value = char;
+      }
+
+      // if index greater than tail index
+      else if (index > tail.index) {
+        for (let i = tail.index + 1; i < index; i++) {
           // add empty char
           this.addCharToLast("", Direction.None);
         }
         // add new char
         this.addCharToLast(char, direction);
       }
+
     }
   }
 
