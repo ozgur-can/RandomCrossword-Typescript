@@ -3,7 +3,6 @@ interface IWordPuzzle {
   wordDb: IWordDb;
   search(word: string, charIndex: number);
   run();
-  printWordTable();
 }
 
 interface IWordDb {
@@ -13,6 +12,20 @@ interface IWordDb {
   addToIndex(listIndex: number, charIndex: number, char: string, direction: Direction);
   getList(index: number): ILinkedList | undefined;
   getChar(listIndex: number, charIndex: number): ICharNode | undefined; 
+  printWords();
+}
+
+interface ILinkedList {
+  head: ICharNode;
+  tail: ICharNode;
+  length: number;
+  addCharToLast(char: string, direction: Direction);
+  addCharToHead(char: string, direction: Direction);
+  addWord(word: string, direction: Direction);
+  addToIndex(index: number, char: string, direction: Direction);
+  createHeadTail(index?: number, char?: string, direction?: Direction);
+  searchChar(char: string, used: boolean): ICharNode | undefined;
+  getCharAt(searchIndex: number): ICharNode | undefined;
 }
 
 interface ICoord {
@@ -39,20 +52,6 @@ interface ICharNode {
   index?: number;
   direction: Direction;
   used?: boolean;
-}
-
-interface ILinkedList {
-  head: ICharNode;
-  tail: ICharNode;
-  length: number;
-  addCharToLast(char: string, direction: Direction);
-  addCharToHead(char: string, direction: Direction);
-  addWord(word: string, direction: Direction);
-  addToIndex(index: number, char: string, direction: Direction);
-  searchChar(char: string, used: boolean): ICharNode | undefined;
-  getCharAt(searchIndex: number): ICharNode | undefined;
-  printList();
-  returnList(): string;
 }
 
 export {

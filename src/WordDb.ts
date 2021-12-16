@@ -148,7 +148,7 @@ class WordDb implements IWordDb {
       // create new list if not found
       this.charLists.set(listIndex, new LinkedList());
       // add char to new list
-      this.addToIndex(listIndex, charIndex, char, direction);
+      this.charLists.get(listIndex).addToIndex(charIndex, char, direction);
     } else {
       // add char to list
       list.addToIndex(charIndex, char, direction);
@@ -164,6 +164,36 @@ class WordDb implements IWordDb {
     if (this.charLists.has(listIndex)) {
       return this.charLists.get(listIndex).getCharAt(charIndex);
     } else return undefined;
+  }
+
+  printWords() {
+    let headIndex, tailIndex;
+    interface IChar {
+      x: number;
+      y: number;
+      value: string;
+    }
+
+    let lines: IChar[][] = [];
+
+    for (let i = 0; i < this.charLists.size; i++) {
+      if (this.charLists.has(i)) {
+        let line: IChar[] = [];
+        headIndex = this.charLists.get(i).head.index;
+        tailIndex = this.charLists.get(i).tail.index;
+
+        for (let j = headIndex; j <= tailIndex; j++) {
+          let current = this.charLists.get(i).getCharAt(j);
+          if (current) {
+            let char: IChar = { value: current.value, x: i, y: j };
+            line.push(char);
+          }
+        }
+        lines.push(line);
+      }
+    }
+
+    console.log(lines);
   }
 }
 

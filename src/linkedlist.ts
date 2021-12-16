@@ -84,26 +84,70 @@ class LinkedList implements ILinkedList {
   }
 
   addToIndex(index: number, char: string, direction: Direction) {
-    if (index < 0) {
-      for (let i = 0; i < index; i--) {
-        // add empty char
-        this.addCharToHead("", Direction.None);
+    let head = this.head;
+    let tail = this.tail;
+
+    if (!head && !tail) {
+      if (index == 0) {
+        this.createHeadTail(index, char, direction);
+      } else {
+        this.createHeadTail();
+
+        let head = this.head;
+        let tail = this.tail;
+
+        if (index > head.index && index < tail.index) {
+          for (let i = head.index; i < index; i++) {
+            // add empty char
+            this.addCharToLast("", Direction.None);
+          }
+          // add new char
+          this.addCharToLast(char, direction);
+        } else if (index > tail.index) {
+          for (let i = tail.index + 1; i < index; i++) {
+            // add empty char
+            this.addCharToLast("", Direction.None);
+          }
+          // add new char
+          this.addCharToLast(char, direction);
+        }
       }
-      // add new char
-      this.addCharToHead(char, direction);
+    } else {
+      if (index < head.index) {
+        for (let i = 0; i < index; i--) {
+          // add empty char
+          this.addCharToHead("", Direction.None);
+        }
+        // add new char
+        this.addCharToHead(char, direction);
+      } else if (index > head.index && index < tail.index) {
+        for (let i = head.index; i < index; i++) {
+          // add empty char
+          this.addCharToLast("", Direction.None);
+        }
+        // add new char
+        this.addCharToLast(char, direction);
+      } else if (index > tail.index) {
+        for (let i = tail.index; i < index; i++) {
+          // add empty char
+          this.addCharToLast("", Direction.None);
+        }
+        // add new char
+        this.addCharToLast(char, direction);
+      }
     }
+  }
 
-    if (index > 0)
-      for (let i = 0; i < index; i++) {
-        // add empty string
-        this.addCharToLast("", direction);
-      }
-    // add new char
-    this.addCharToLast(char, direction);
-
-    if (index == 0) {
-      // add last or head
-      this.addCharToLast(char, direction);
+  // creates head & tail
+  createHeadTail(index?: number, char?: string, direction?: Direction) {
+    if (!char && !index && !direction) {
+      this.head = new CharNode("", 0, Direction.None);
+      this.tail = this.head;
+      this.length++;
+    } else {
+      this.head = new CharNode(char, index, direction);
+      this.tail = this.head;
+      this.length++;
     }
   }
 
@@ -144,44 +188,6 @@ class LinkedList implements ILinkedList {
     if (searchIndex == current.index) return current;
     // not found
     else return undefined;
-  }
-
-  // print all nodes
-  printList() {
-    let line = "";
-    let current = this.head;
-
-    while (current.prev !== undefined) {
-      current = current.prev;
-    }
-
-    while (current.next !== undefined) {
-      line += current.value;
-      current = current.next;
-    }
-
-    line += current.value;
-
-    console.log(line);
-  }
-
-  // return all nodes
-  returnList(): string {
-    let line = "";
-    let current = this.head;
-
-    while (current.prev !== undefined) {
-      current = current.prev;
-    }
-
-    while (current.next !== undefined) {
-      line += current.value;
-      current = current.next;
-    }
-
-    line += current.value;
-
-    return line;
   }
 }
 
