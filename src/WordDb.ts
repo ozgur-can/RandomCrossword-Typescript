@@ -21,7 +21,7 @@ class WordDb implements IWordDb {
       // add first word L-R / U-D randomly
       let random = Math.random();
 
-      if (random > 0) {
+      if (random < 0) {
         // Direction L-R
 
         for (let i = 0; i < word.length; i++) {
@@ -83,21 +83,39 @@ class WordDb implements IWordDb {
               j < charFound.index - charIndex + word.length, t < word.length;
               j++, t++
             ) {
+              if (t == 0) {
+                // check up side
+                if (this.hasChar(i, j - 1)) {
+                  return;
+                }
+              }
+              // check down side
+              else if (t == word.length - 1) {
+                if (this.hasChar(i, j + 1)) {
+                  return;
+                }
+              }
+
               if (charFound.index == j) {
                 continue;
               } else {
-                // add downward
-                if (charFound.index > j) {
-                  let currentChar = word[-1 - j];
-                  // add to head
-                  listFound.addCharToHead(currentChar, Direction.UD);
-                }
+                // check left and right side
+                if (this.hasChar(i - 1, j) || this.hasChar(i + 1, j)) {
+                  return;
+                } else {
+                  // add downward
+                  if (charFound.index > j) {
+                    let currentChar = word[t];
+                    // add to head
+                    listFound.addCharToHead(currentChar, Direction.UD);
+                  }
 
-                // add upward
-                if (charFound.index < j) {
-                  let currentChar = word[t];
-                  // add to last
-                  listFound.addCharToLast(currentChar, Direction.UD);
+                  // add upward
+                  if (charFound.index < j) {
+                    let currentChar = word[t];
+                    // add to last
+                    listFound.addCharToLast(currentChar, Direction.UD);
+                  }
                 }
               }
             }
@@ -105,6 +123,8 @@ class WordDb implements IWordDb {
             isAdded = true;
             // char used > true
             charFound.used = true;
+            // exit loop with value
+            return isAdded;
           }
 
           // old word is in Up-Down
@@ -114,18 +134,39 @@ class WordDb implements IWordDb {
               j < i - charIndex + word.length, t < word.length;
               j++, t++
             ) {
+              if (t == 0) {
+                // check left side
+                if (this.hasChar(j - 1, charFound.index)) {
+                  return;
+                }
+              }
+              // check right side
+              else if (t == word.length - 1) {
+                if (this.hasChar(j + 1, charFound.index)) {
+                  return;
+                }
+              }
+
               if (j == i) {
                 continue;
               } else {
+                // check up and down side
+                if (
+                  this.hasChar(j, charFound.index - 1) ||
+                  this.hasChar(j, charFound.index + 1)
+                ) {
+                  return;
+                }
                 // add to list
-                // console.log(j, charFound.index, word[j]);
-                this.addToIndex(j, charFound.index, word[t], Direction.LR);
+                else this.addToIndex(j, charFound.index, word[t], Direction.LR);
               }
             }
             // update added status
             isAdded = true;
             // char used > true
             charFound.used = true;
+            // exit loop with value
+            return isAdded;
           }
         }
       }
@@ -166,12 +207,21 @@ class WordDb implements IWordDb {
     } else return undefined;
   }
 
+  hasChar(listIndex: number, charIndex: number): boolean {
+    // return true char if exist
+    if (this.charLists.has(listIndex)) {
+      let charFound = this.charLists.get(listIndex).getCharAt(charIndex);
+      return charFound && charFound.value != "" ? true : false;
+    } else return false;
+  }
+
   printWords() {
     let headIndex, tailIndex;
     interface IChar {
       x: number;
       y: number;
       value: string;
+      used: boolean;
     }
 
     let lines: IChar[][] = [];
@@ -184,7 +234,12 @@ class WordDb implements IWordDb {
       for (let j = headIndex; j <= tailIndex; j++) {
         let current = list.getCharAt(j);
         if (current) {
-          let char: IChar = { value: current.value, x: i, y: j };
+          let char: IChar = {
+            value: current.value,
+            x: i,
+            y: j,
+            used: current.used,
+          };
           line.push(char);
         }
       }

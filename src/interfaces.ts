@@ -12,6 +12,7 @@ interface IWordDb {
   addToIndex(listIndex: number, charIndex: number, char: string, direction: Direction);
   getList(index: number): ILinkedList | undefined;
   getChar(listIndex: number, charIndex: number): ICharNode | undefined; 
+  hasChar(listIndex: number, charIndex: number): boolean;
   printWords();
 }
 
