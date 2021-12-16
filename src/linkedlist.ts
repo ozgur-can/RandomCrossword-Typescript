@@ -7,9 +7,9 @@ class CharNode implements ICharNode {
   index?: number;
   direction: Direction;
   used?: boolean;
-  constructor(char: string, index: number, direction: Direction) {
-    this.value = char;
+  constructor(index: number, char: string, direction: Direction) {
     this.index = index;
+    this.value = char;
     this.direction = direction;
     this.used = false;
   }
@@ -23,19 +23,16 @@ class LinkedList implements ILinkedList {
     this.length = 0;
   }
 
-  // add char to last // > 'e'
+  // add char to last > 'e'
   addCharToLast(char: string, direction: Direction) {
     if (!this.head && !this.tail) {
-      this.head = new CharNode(char, 0, direction);
-      this.tail = this.head;
-      this.length++;
+      this.createHeadTail(0, char, direction);
     } else {
       // current last
-      // let last: ICharNode = this.getLast();
       let last = this.tail;
 
       // new char object
-      let node = new CharNode(char, last.index + 1, direction);
+      let node = new CharNode(last.index + 1, char, direction);
 
       // add new to next of last char
       last.next = node;
@@ -49,17 +46,15 @@ class LinkedList implements ILinkedList {
 
   addCharToHead(char: string, direction: Direction) {
     if (!this.head && !this.tail) {
-      this.head = new CharNode(char, 0, direction);
-      this.tail = this.head;
-      this.length++;
+      this.createHeadTail(0, char, direction);
     } else {
       // current head
       let currentHead = this.head;
 
       // new head
       let newHead: ICharNode = new CharNode(
-        char,
         currentHead.index - 1,
+        char,
         direction
       );
 
@@ -116,9 +111,8 @@ class LinkedList implements ILinkedList {
         }
       }
     } else {
-
       // if index equals head's index
-      if(index == head.index){
+      if (index == head.index) {
         head.value = char;
       }
 
@@ -154,7 +148,7 @@ class LinkedList implements ILinkedList {
       }
 
       // if index equals tail's index
-      if(index == tail.index){
+      if (index == tail.index) {
         tail.value = char;
       }
 
@@ -167,18 +161,17 @@ class LinkedList implements ILinkedList {
         // add new char
         this.addCharToLast(char, direction);
       }
-
     }
   }
 
   // creates head & tail
   createHeadTail(index?: number, char?: string, direction?: Direction) {
     if (!char && !index && !direction) {
-      this.head = new CharNode("", 0, Direction.None);
+      this.head = new CharNode(0, "", Direction.None);
       this.tail = this.head;
       this.length++;
     } else {
-      this.head = new CharNode(char, index, direction);
+      this.head = new CharNode(index, char, direction);
       this.tail = this.head;
       this.length++;
     }

@@ -6,12 +6,11 @@ interface IWordPuzzle {
 }
 
 interface IWordDb {
-  charLists: Map<number, ILinkedList>; // 0*0, { char: 'e', parent.. }
-  addToDb(word: string, charIndexOfNewChar?: number, oldCharData?: ICoord);
+  charLists: Map<number, ILinkedList>;
+  addToDb(word: string);
   searchAndAddToDb(word: string, charIndex: number): boolean;
   addToIndex(listIndex: number, charIndex: number, char: string, direction: Direction);
-  getList(index: number): ILinkedList | undefined;
-  getChar(listIndex: number, charIndex: number): ICharNode | undefined; 
+  getCharInList(listIndex: number, charIndex: number): ICharNode | undefined; 
   hasChar(listIndex: number, charIndex: number): boolean;
   printWords();
 }
@@ -27,17 +26,6 @@ interface ILinkedList {
   createHeadTail(index?: number, char?: string, direction?: Direction);
   searchChar(char: string, used: boolean): ICharNode | undefined;
   getCharAt(searchIndex: number): ICharNode | undefined;
-}
-
-interface ICoord {
-  x: number;
-  y: number;
-  direction: DbAddDirection;
-}
-
-enum DbAddDirection {
-  leftToRight,
-  upToDown,
 }
 
 enum Direction {
@@ -58,8 +46,6 @@ interface ICharNode {
 export {
   IWordPuzzle,
   IWordDb,
-  DbAddDirection,
-  ICoord,
   Direction,
   ICharNode,
   ILinkedList,

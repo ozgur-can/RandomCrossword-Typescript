@@ -1,11 +1,4 @@
-import {
-  DbAddDirection,
-  Direction,
-  ICharNode,
-  ICoord,
-  ILinkedList,
-  IWordDb,
-} from "./interfaces";
+import { Direction, ICharNode, ILinkedList, IWordDb } from "./interfaces";
 import { LinkedList } from "./linkedlist";
 
 class WordDb implements IWordDb {
@@ -15,7 +8,7 @@ class WordDb implements IWordDb {
     this.charLists = new Map();
   }
 
-  addToDb(word: string, charIndexOfNewChar: number, oldCharData?: ICoord) {
+  addToDb(word: string) {
     // db is empty
     if (this.charLists.size == 0) {
       // add first word L-R / U-D randomly
@@ -45,16 +38,6 @@ class WordDb implements IWordDb {
 
         // add list to db
         this.charLists.set(0, list);
-      }
-    }
-    // db is not empty
-    else {
-      // old L-R, new U-D
-      if (oldCharData.direction == DbAddDirection.leftToRight) {
-      }
-
-      // old U-D, new L-R
-      if (oldCharData.direction == DbAddDirection.upToDown) {
       }
     }
   }
@@ -96,6 +79,7 @@ class WordDb implements IWordDb {
                 }
               }
 
+              // joint char
               if (charFound.index == j) {
                 continue;
               } else {
@@ -147,6 +131,7 @@ class WordDb implements IWordDb {
                 }
               }
 
+              // joint char
               if (j == i) {
                 continue;
               } else {
@@ -175,6 +160,7 @@ class WordDb implements IWordDb {
     return isAdded;
   }
 
+  // add char to given list > (x, y, 'a', LR/UD)
   addToIndex(
     listIndex: number,
     charIndex: number,
@@ -196,17 +182,15 @@ class WordDb implements IWordDb {
     }
   }
 
-  getList(index: number): ILinkedList | undefined {
-    return this.charLists.get(index);
-  }
-
-  getChar(listIndex: number, charIndex: number): ICharNode | undefined {
+  // get char in a list if exist
+  getCharInList(listIndex: number, charIndex: number): ICharNode | undefined {
     // return (x, y) char if exist
     if (this.charLists.has(listIndex)) {
       return this.charLists.get(listIndex).getCharAt(charIndex);
     } else return undefined;
   }
 
+  // check char if exist
   hasChar(listIndex: number, charIndex: number): boolean {
     // return true char if exist
     if (this.charLists.has(listIndex)) {
@@ -215,6 +199,7 @@ class WordDb implements IWordDb {
     } else return false;
   }
 
+  // print words
   printWords() {
     let headIndex, tailIndex;
     interface IChar {
