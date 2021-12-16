@@ -1,8 +1,10 @@
 interface IWordPuzzle {
   words: string[];
   wordDb: IWordDb;
+  unusedWords: string[];
+  finalCheck: boolean;
   search(word: string, charIndex: number);
-  run();
+  run(words: string[]);
 }
 
 interface IWordDb {
