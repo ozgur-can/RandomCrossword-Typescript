@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.js"
+    "dev": "node ./scripts/esbuild.config.js -w",
+    "build": "node ./scripts/esbuild.config.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,8 @@
   "homepage": "https://github.com/zgrcnltnk/WordPuzzleGame#readme",
   "devDependencies": {
     "@types/lodash": "^4.14.178",
-    "esbuild": "^0.14.3"
+    "esbuild": "^0.14.3",
+    "esbuild-serve": "^1.0.1"
   },
   "dependencies": {
     "lodash": "^4.17.21"
