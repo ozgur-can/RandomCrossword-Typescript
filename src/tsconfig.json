@@ -6,7 +6,6 @@
     "module": "CommonJS",
     "moduleResolution": "Node",
     "typeRoots": ["./types", "puzzle/interfaces.ts"],
-    "isolatedModules": true,
     "esModuleInterop": true
   }
 }
