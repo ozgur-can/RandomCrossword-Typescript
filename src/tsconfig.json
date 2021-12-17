@@ -8,6 +8,7 @@
     // "esModuleInterop": true,
     "isolatedModules": false,
     "typeRoots": ["./interfaces.ts"],
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "esModuleInterop": true
   }
 }
