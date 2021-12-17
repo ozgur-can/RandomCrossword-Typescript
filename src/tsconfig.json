@@ -1,14 +1,12 @@
 {
   "include": ["./"],
   "compilerOptions": {
-    "module": "CommonJS",
+    "outDir": "dist",
     "target": "ESNext",
-    // "noImplicitAny": true,
-    // "sourceMap": true,
-    // "esModuleInterop": true,
-    "isolatedModules": false,
-    "typeRoots": ["./interfaces.ts"],
+    "module": "CommonJS",
     "moduleResolution": "Node",
+    "typeRoots": ["./types", "puzzle/interfaces.ts"],
+    "isolatedModules": true,
     "esModuleInterop": true
   }
 }
