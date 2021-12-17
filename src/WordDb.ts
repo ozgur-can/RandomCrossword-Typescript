@@ -69,8 +69,10 @@ class WordDb implements IWordDb {
           if (charFound) {
 
             if(charFound.direction == Direction.LR){
+              // check area to add new word
               let area = this.checkWordAreaEmpty(charFound.index, charIndex, word, charFound.direction, charFound, i , false);
   
+              // add if empty
               if (area && area.isEmpty) {
                 isAdded = this.checkWordAreaEmpty(charFound.index, charIndex, word, charFound.direction, charFound, i, true).isAdded;
   
@@ -78,8 +80,10 @@ class WordDb implements IWordDb {
               }
             }
             else if(charFound.direction == Direction.UD){
+              // check area to add new word
               let area = this.checkWordAreaEmpty(i, charIndex, word, charFound.direction, charFound, i, false);
 
+              // add if empty
               if(area && area.isEmpty){
                 isAdded = this.checkWordAreaEmpty(i, charIndex, word, charFound.direction, charFound, i, true).isAdded;
 
