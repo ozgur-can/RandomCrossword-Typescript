@@ -16,7 +16,7 @@ k.scene("main", () => {
   const boxSize = 40;
 
   // shuffle array
-  const words: string[] = _.shuffle(["east", "set", "tea"]); // words > "seat", "tea", "east", "eat", "tea"
+  const words: string[] = _.shuffle(["east", "set", "tea", "seat", "eat"]); // words > "seat", "tea", "east", "eat", "tea"
   const puzzle = new WordPuzzle(words);
 
   // result for console

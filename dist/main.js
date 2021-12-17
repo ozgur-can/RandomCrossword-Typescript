@@ -5814,7 +5814,7 @@ k = kaboom({
 });
 k.scene("main", () => {
   const boxSize = 40;
-  const words = import_lodash2.default.shuffle(["east", "set", "tea"]);
+  const words = import_lodash2.default.shuffle(["east", "set", "tea", "seat", "eat"]);
   const puzzle = new WordPuzzle(words);
   let kaboomLevel = puzzle.wordDb.generateKaboomLevel();
   const mapChars = (ch, pos) => {
