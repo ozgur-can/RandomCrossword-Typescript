@@ -97,14 +97,14 @@ class LinkedList implements ILinkedList {
         if (index > head.index && index < tail.index) {
           for (let i = head.index; i < index; i++) {
             // add empty char
-            this.addCharToLast("", Direction.None);
+            this.addCharToLast("?", Direction.None);
           }
           // add new char
           this.addCharToLast(char, direction);
         } else if (index > tail.index) {
           for (let i = tail.index + 1; i < index; i++) {
             // add empty char
-            this.addCharToLast("", Direction.None);
+            this.addCharToLast("?", Direction.None);
           }
           // add new char
           this.addCharToLast(char, direction);
@@ -120,7 +120,7 @@ class LinkedList implements ILinkedList {
       else if (index < head.index) {
         for (let i = 0; i > index + 1; i--) {
           // add empty char
-          this.addCharToHead("", Direction.None);
+          this.addCharToHead("?", Direction.None);
         }
         // add new char
         this.addCharToHead(char, direction);
@@ -140,7 +140,7 @@ class LinkedList implements ILinkedList {
           let charFound = this.getCharAt(index);
 
           // check this char is proper to update
-          if (charFound.value == "" && charFound.used == false) {
+          if (charFound.value == "?" && charFound.used == false) {
             // set char
             charFound.value = char;
           }
@@ -156,7 +156,7 @@ class LinkedList implements ILinkedList {
       else if (index > tail.index) {
         for (let i = tail.index + 1; i < index; i++) {
           // add empty char
-          this.addCharToLast("", Direction.None);
+          this.addCharToLast("?", Direction.None);
         }
         // add new char
         this.addCharToLast(char, direction);
@@ -167,7 +167,7 @@ class LinkedList implements ILinkedList {
   // creates head & tail
   createHeadTail(index?: number, char?: string, direction?: Direction) {
     if (!char && !index && !direction) {
-      this.head = new CharNode(0, "", Direction.None);
+      this.head = new CharNode(0, "?", Direction.None);
       this.tail = this.head;
       this.length++;
     } else {

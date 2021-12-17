@@ -15,7 +15,8 @@ interface IWordDb {
   checkWordAreaEmpty(loopIndex1: number, loopIndex2: number, word: string, direction: Direction, charFound?: ICharNode, listIndex?: number, add?: boolean): ICheckWordAreaEmpty
   getCharInList(listIndex: number, charIndex: number): ICharNode | undefined; 
   hasChar(listIndex: number, charIndex: number): boolean;
-  printWords();
+  getCharmap(): IChar[];
+  generateKaboomLevel();
 }
 
 interface ILinkedList {
@@ -46,6 +47,12 @@ interface ICharNode {
   used?: boolean;
 }
 
+interface IChar {
+  x: number;
+  y: number;
+  value: string;
+}
+
 interface ICheckWordAreaEmpty{
   isEmpty?: boolean;
   isAdded?: boolean;
@@ -56,6 +63,7 @@ export {
   IWordDb,
   Direction,
   ICharNode,
+  IChar,
   ILinkedList,
   ICheckWordAreaEmpty
 };

@@ -1,11 +1,13 @@
 import {
   Direction,
+  IChar,
   ICharNode,
   ICheckWordAreaEmpty,
   ILinkedList,
   IWordDb,
 } from "./interfaces";
 import { LinkedList } from "./linkedlist";
+import _ from "lodash";
 
 class WordDb implements IWordDb {
   charLists: Map<number, ILinkedList>;
@@ -20,7 +22,7 @@ class WordDb implements IWordDb {
       // add first word L-R / U-D randomly
       let random = Math.random();
 
-      if (random > 0) {
+      if (random > 0.5) {
         // Direction L-R
 
         for (let i = 0; i < word.length; i++) {
@@ -67,25 +69,55 @@ class WordDb implements IWordDb {
 
           // char found
           if (charFound) {
-
-            if(charFound.direction == Direction.LR){
+            if (charFound.direction == Direction.LR) {
               // check area to add new word
-              let area = this.checkWordAreaEmpty(charFound.index, charIndex, word, charFound.direction, charFound, i , false);
-  
+              let area = this.checkWordAreaEmpty(
+                charFound.index,
+                charIndex,
+                word,
+                charFound.direction,
+                charFound,
+                i,
+                false
+              );
+
               // add if empty
               if (area && area.isEmpty) {
-                isAdded = this.checkWordAreaEmpty(charFound.index, charIndex, word, charFound.direction, charFound, i, true).isAdded;
-  
+                isAdded = this.checkWordAreaEmpty(
+                  charFound.index,
+                  charIndex,
+                  word,
+                  charFound.direction,
+                  charFound,
+                  i,
+                  true
+                ).isAdded;
+
                 return isAdded;
               }
-            }
-            else if(charFound.direction == Direction.UD){
+            } else if (charFound.direction == Direction.UD) {
               // check area to add new word
-              let area = this.checkWordAreaEmpty(i, charIndex, word, charFound.direction, charFound, i, false);
+              let area = this.checkWordAreaEmpty(
+                i,
+                charIndex,
+                word,
+                charFound.direction,
+                charFound,
+                i,
+                false
+              );
 
               // add if empty
-              if(area && area.isEmpty){
-                isAdded = this.checkWordAreaEmpty(i, charIndex, word, charFound.direction, charFound, i, true).isAdded;
+              if (area && area.isEmpty) {
+                isAdded = this.checkWordAreaEmpty(
+                  i,
+                  charIndex,
+                  word,
+                  charFound.direction,
+                  charFound,
+                  i,
+                  true
+                ).isAdded;
 
                 return isAdded;
               }
@@ -127,8 +159,8 @@ class WordDb implements IWordDb {
     direction: Direction,
     charFound: ICharNode,
     listIndex?: number,
-    add?: boolean,
-    ): ICheckWordAreaEmpty {
+    add?: boolean
+  ): ICheckWordAreaEmpty {
     let wordLength = word.length;
     let startIndex = loopIndex1 - loopIndex2;
     let endIndex = startIndex + wordLength;
@@ -221,10 +253,9 @@ class WordDb implements IWordDb {
       }
 
       // last turn of loop with add > true
-      if(t == word.length - 1 && add){
+      if (t == word.length - 1 && add) {
         charFound.used = true;
         return { isAdded: add };
-
       }
 
       // last turn of loop with add >  false
@@ -247,24 +278,17 @@ class WordDb implements IWordDb {
     // return true char if exist
     if (this.charLists.has(listIndex)) {
       let charFound = this.charLists.get(listIndex).getCharAt(charIndex);
-      return charFound && charFound.value != "" ? true : false;
+      return charFound && charFound.value != "?" ? true : false;
     } else return false;
   }
 
-  // print words
-  printWords() {
+  // char map of result
+  getCharmap(): IChar[] {
     let headIndex, tailIndex;
-    interface IChar {
-      x: number;
-      y: number;
-      value: string;
-      used: boolean;
-    }
 
-    let lines: IChar[][] = [];
+    let lines: IChar[] = [];
 
     this.charLists.forEach((list, i) => {
-      let line: IChar[] = [];
       headIndex = list.head.index;
       tailIndex = list.tail.index;
 
@@ -275,15 +299,58 @@ class WordDb implements IWordDb {
             value: current.value,
             x: i,
             y: j,
-            used: current.used,
           };
-          line.push(char);
+          lines.push(char as any);
         }
       }
-      lines.push(line);
     });
 
-    console.log(lines);
+    return lines;
+  }
+
+  generateKaboomLevel() {
+    let chars: IChar[] = this.getCharmap();
+
+    // get min and max values for loop
+    let yMin = _.minBy(chars, "y").y;
+    let yMax = _.maxBy(chars, "y").y;
+    let xMin = _.minBy(chars, "x").x;
+    let xMax = _.maxBy(chars, "x").x;
+
+    // update missing chars in map
+    for (let i = yMin; i <= yMax; i++) {
+      for (let j = xMin; j <= xMax; j++) {
+        let found = chars.some((item) => item.x == j && item.y == i);
+
+        if (!found) {
+          chars.push({ value: "?", x: j, y: i });
+        }
+      }
+    }
+
+    // TODO: use lodash later
+    // sort x and y
+    chars.sort((a, b) => a.x - b.x);
+    chars.sort((a, b) => a.y - b.y);
+
+    // group by y / listIndex values
+    let lines = _.chain(chars)
+      .groupBy("y")
+      .map((value, key) => ({ y: key, chars: value }))
+      .value();
+
+    // kaboom level
+    let level = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      let line = "";
+      // update line
+      lines[i].chars.forEach((item) => (line += item.value));
+      // add lines to level
+      level.push(line);
+    }
+
+    return level;
   }
 }
 
