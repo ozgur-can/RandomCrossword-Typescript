@@ -12,6 +12,7 @@ interface IWordDb {
   addToDb(word: string);
   searchAndAddToDb(word: string, charIndex: number): boolean;
   addToIndex(listIndex: number, charIndex: number, char: string, direction: Direction);
+  checkWordAreaEmpty(loopIndex1: number, loopIndex2: number, word: string, direction: Direction, charFound?: ICharNode, listIndex?: number, add?: boolean): ICheckWordAreaEmpty
   getCharInList(listIndex: number, charIndex: number): ICharNode | undefined; 
   hasChar(listIndex: number, charIndex: number): boolean;
   printWords();
@@ -45,10 +46,16 @@ interface ICharNode {
   used?: boolean;
 }
 
+interface ICheckWordAreaEmpty{
+  isEmpty?: boolean;
+  isAdded?: boolean;
+}
+
 export {
   IWordPuzzle,
   IWordDb,
   Direction,
   ICharNode,
   ILinkedList,
+  ICheckWordAreaEmpty
 };

@@ -1,4 +1,10 @@
-import { Direction, ICharNode, ILinkedList, IWordDb } from "./interfaces";
+import {
+  Direction,
+  ICharNode,
+  ICheckWordAreaEmpty,
+  ILinkedList,
+  IWordDb,
+} from "./interfaces";
 import { LinkedList } from "./linkedlist";
 
 class WordDb implements IWordDb {
@@ -14,7 +20,7 @@ class WordDb implements IWordDb {
       // add first word L-R / U-D randomly
       let random = Math.random();
 
-      if (random < 0) {
+      if (random > 0) {
         // Direction L-R
 
         for (let i = 0; i < word.length; i++) {
@@ -59,99 +65,27 @@ class WordDb implements IWordDb {
           // char found
           let charFound = listFound.searchChar(charToSearch, false);
 
-          // char found && Left-Right
-          if (charFound && charFound.direction == Direction.LR) {
-            for (
-              let j = charFound.index - charIndex, t = 0;
-              j < charFound.index - charIndex + word.length, t < word.length;
-              j++, t++
-            ) {
-              if (t == 0) {
-                // check up side
-                if (this.hasChar(i, j - 1)) {
-                  return;
-                }
-              }
-              // check down side
-              else if (t == word.length - 1) {
-                if (this.hasChar(i, j + 1)) {
-                  return;
-                }
-              }
+          // char found
+          if (charFound) {
 
-              // joint char
-              if (charFound.index == j) {
-                continue;
-              } else {
-                // check left and right side
-                if (this.hasChar(i - 1, j) || this.hasChar(i + 1, j)) {
-                  return;
-                } else {
-                  // add downward
-                  if (charFound.index > j) {
-                    let currentChar = word[t];
-                    // add to head
-                    listFound.addCharToHead(currentChar, Direction.UD);
-                  }
-
-                  // add upward
-                  if (charFound.index < j) {
-                    let currentChar = word[t];
-                    // add to last
-                    listFound.addCharToLast(currentChar, Direction.UD);
-                  }
-                }
+            if(charFound.direction == Direction.LR){
+              let area = this.checkWordAreaEmpty(charFound.index, charIndex, word, charFound.direction, charFound, i , false);
+  
+              if (area && area.isEmpty) {
+                isAdded = this.checkWordAreaEmpty(charFound.index, charIndex, word, charFound.direction, charFound, i, true).isAdded;
+  
+                return isAdded;
               }
             }
-            // update added status
-            isAdded = true;
-            // char used > true
-            charFound.used = true;
-            // exit loop with value
-            return isAdded;
-          }
+            else if(charFound.direction == Direction.UD){
+              let area = this.checkWordAreaEmpty(i, charIndex, word, charFound.direction, charFound, i, false);
 
-          // old word is in Up-Down
-          else if (charFound && charFound.direction == Direction.UD) {
-            for (
-              let j = i - charIndex, t = 0;
-              j < i - charIndex + word.length, t < word.length;
-              j++, t++
-            ) {
-              if (t == 0) {
-                // check left side
-                if (this.hasChar(j - 1, charFound.index)) {
-                  return;
-                }
-              }
-              // check right side
-              else if (t == word.length - 1) {
-                if (this.hasChar(j + 1, charFound.index)) {
-                  return;
-                }
-              }
+              if(area && area.isEmpty){
+                isAdded = this.checkWordAreaEmpty(i, charIndex, word, charFound.direction, charFound, i, true).isAdded;
 
-              // joint char
-              if (j == i) {
-                continue;
-              } else {
-                // check up and down side
-                if (
-                  this.hasChar(j, charFound.index - 1) ||
-                  this.hasChar(j, charFound.index + 1)
-                ) {
-                  return;
-                }
-                // add to list
-                else this.addToIndex(j, charFound.index, word[t], Direction.LR);
+                return isAdded;
               }
             }
-            // update added status
-            isAdded = true;
-            // char used > true
-            charFound.used = true;
-            // exit loop with value
-            return isAdded;
           }
         }
       }
@@ -179,6 +113,120 @@ class WordDb implements IWordDb {
     } else {
       // add char to list
       list.addToIndex(charIndex, char, direction);
+    }
+  }
+
+  checkWordAreaEmpty(
+    loopIndex1: number,
+    loopIndex2: number,
+    word: string,
+    direction: Direction,
+    charFound: ICharNode,
+    listIndex?: number,
+    add?: boolean,
+    ): ICheckWordAreaEmpty {
+    let wordLength = word.length;
+    let startIndex = loopIndex1 - loopIndex2;
+    let endIndex = startIndex + wordLength;
+
+    // @ts-ignore
+    for (let j = startIndex, t = 0; j < endIndex, t < wordLength; j++, t++) {
+      // Left - Right
+      if (direction == Direction.LR) {
+        if (t == 0) {
+          // check up side
+          if (!add && this.hasChar(listIndex, j - 1)) {
+            return { isEmpty: false };
+          }
+        }
+
+        // check down side
+        else if (t == wordLength - 1) {
+          if (!add && this.hasChar(listIndex, j + 1)) {
+            return { isEmpty: false };
+          }
+        }
+
+        // joint char
+        if (loopIndex1 == j) {
+          continue;
+        } else {
+          // check left and right side
+          if (
+            !add &&
+            (this.hasChar(listIndex - 1, j) || this.hasChar(listIndex + 1, j))
+          ) {
+            return { isEmpty: false };
+          } else {
+            // add downward
+            if (add && loopIndex1 > j) {
+              let currentChar = word[t];
+
+              // current list
+              let list = this.charLists.get(listIndex);
+
+              // add to head
+              list.addCharToHead(currentChar, Direction.UD);
+            }
+            // add upward
+            else if (add && loopIndex1 < j) {
+              let currentChar = word[t];
+
+              // current list
+              let list = this.charLists.get(listIndex);
+
+              // add to last
+              list.addCharToLast(currentChar, Direction.UD);
+            }
+          }
+        }
+      }
+
+      // Up - Down
+      else if (direction == Direction.UD) {
+        if (t == 0) {
+          // check left side
+          if (!add && this.hasChar(j - 1, charFound.index)) {
+            return { isEmpty: false };
+          }
+        }
+
+        // check right side
+        else if (t == wordLength - 1) {
+          if (!add && this.hasChar(j + 1, charFound.index)) {
+            return { isEmpty: false };
+          }
+        }
+
+        // joint char
+        if (loopIndex1 == j) {
+          continue;
+        } else {
+          // check up and down side
+          if (
+            !add &&
+            (this.hasChar(j, charFound.index - 1) ||
+              this.hasChar(j, charFound.index + 1))
+          ) {
+            return { isEmpty: false };
+          } else if (add) {
+            // add to list
+            this.addToIndex(j, charFound.index, word[t], Direction.LR);
+          }
+        }
+      }
+
+      // last turn of loop with add > true
+      if(t == word.length - 1 && add){
+        charFound.used = true;
+        return { isAdded: add };
+
+      }
+
+      // last turn of loop with add >  false
+      if (t == word.length - 1 && !add) {
+        return { isEmpty: true };
+      }
     }
   }
 
