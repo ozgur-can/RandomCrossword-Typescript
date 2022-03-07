@@ -5813,35 +5813,60 @@ k = kaboom({
   scale: 1.25
 });
 k.scene("main", () => {
+  let map = null;
+  const button = k.add([
+    k.rect(0, 0),
+    k.text("Shuffle"),
+    k.pos(k.center().x, k.height() * 0.2),
+    k.area(),
+    k.scale(0.5),
+    k.origin("center")
+  ]);
+  k.add([
+    k.text("words: seat, east, set, eat, tea"),
+    k.color(k.Color.YELLOW),
+    k.pos(k.center().x, k.height() * 0.3),
+    k.scale(0.25),
+    k.origin("center")
+  ]);
+  k.onClick(() => {
+    if (button.isHovering()) {
+      map.destroy();
+      startGame();
+    }
+  });
   const boxSize = 40;
-  const words = import_lodash2.default.shuffle(["east", "set", "tea", "seat", "eat"]);
-  const puzzle = new WordPuzzle(words);
-  let kaboomLevel = puzzle.wordDb.generateKaboomLevel();
-  const mapChars = (ch, pos) => {
-    if (ch != "?") {
-      return [
-        rect(boxSize, boxSize),
-        outline(2),
-        area(),
-        text(ch, {
-          size: boxSize,
-          width: boxSize,
-          transform: {
-            pos: vec2((pos.x + boxSize) / 5, pos.y),
-            color: rgb(rand(255), rand(255), rand(255))
-          }
-        })
-      ];
+  const startGame = () => {
+    const words = import_lodash2.default.shuffle(["east", "set", "tea", "seat", "eat"]);
+    const puzzle = new WordPuzzle(words);
+    let kaboomLevel = puzzle.wordDb.generateKaboomLevel();
+    const mapChars = (ch, pos) => {
+      if (ch != "?") {
+        return [
+          rect(boxSize, boxSize),
+          outline(2),
+          area(),
+          text(ch, {
+            size: boxSize,
+            width: boxSize,
+            transform: {
+              pos: vec2((pos.x + boxSize) / 5, pos.y),
+              color: rgb(rand(255), rand(255), rand(255))
+            }
+          })
+        ];
+      }
+    };
+    if (kaboomLevel) {
+      map = addLevel(kaboomLevel, {
+        height: boxSize,
+        width: boxSize,
+        pos: center(),
+        any: (ch, pos) => mapChars(ch, pos)
+      });
+    } else {
     }
   };
-  if (kaboomLevel) {
-    addLevel(kaboomLevel, {
-      height: boxSize,
-      width: boxSize,
-      pos: center(),
-      any: (ch, pos) => mapChars(ch, pos)
-    });
-  } else {
-  }
+  startGame();
 });
 k.go("main");

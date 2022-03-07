@@ -13,47 +13,77 @@ k = kaboom({
 });
 
 k.scene("main", () => {
-  const boxSize = 40;
+  let map = null; 
 
-  // shuffle array
-  const words: string[] = _.shuffle(["east", "set", "tea", "seat", "eat"]); // words > "seat", "tea", "east", "eat", "tea"
-  const puzzle = new WordPuzzle(words);
+  const button = k.add([
+    k.rect(0,0),
+    k.text("Shuffle"),
+    k.pos(k.center().x, k.height() * 0.2),
+    k.area(),
+    k.scale(0.5),
+    k.origin("center"),
+  ]);
+  
+  k.add([
+    k.text("words: seat, east, set, eat, tea"),
+    k.color(k.Color.YELLOW),
+    k.pos(k.center().x, k.height() * 0.3),
+    k.scale(0.25),
+    k.origin("center"),
+  ])
 
-  // result for console
-  // let charMap = puzzle.wordDb.getCharmap();
-
-  let kaboomLevel = puzzle.wordDb.generateKaboomLevel();
-
-  // show if not "?"
-  const mapChars = (ch: string, pos: Vec2) => {
-    if (ch != "?") {
-      return [
-        rect(boxSize, boxSize),
-        outline(2),
-        area(),
-        text(ch, {
-          size: boxSize,
-          width: boxSize,
-          transform: {
-            pos: vec2((pos.x + boxSize) / 5, pos.y),
-            color: rgb(rand(255), rand(255), rand(255)),
-          },
-        }),
-      ];
+  k.onClick(() => {
+    if (button.isHovering()) {
+      map.destroy();
+      startGame();
     }
-  };
+  });
 
-  if (kaboomLevel) {
-    addLevel(kaboomLevel, {
-      height: boxSize,
-      width: boxSize,
-      pos: center(),
-      // @ts-ignore
-      any: (ch, pos) => mapChars(ch, pos),
-    });
-  } else {
-    // no result
+  const boxSize = 40;
+  const startGame = () => {
+    // shuffle array
+    const words: string[] = _.shuffle(["east", "set", "tea", "seat", "eat"]); // words > "seat", "tea", "east", "eat", "tea"
+    const puzzle = new WordPuzzle(words);
+  
+    // result for console
+    // let charMap = puzzle.wordDb.getCharmap();
+  
+    let kaboomLevel = puzzle.wordDb.generateKaboomLevel();
+  
+    // show if not "?"
+    const mapChars = (ch: string, pos: Vec2) => {
+      if (ch != "?") {
+        return [
+          rect(boxSize, boxSize),
+          outline(2),
+          area(),
+          text(ch, {
+            size: boxSize,
+            width: boxSize,
+            transform: {
+              pos: vec2((pos.x + boxSize) / 5, pos.y),
+              color: rgb(rand(255), rand(255), rand(255)),
+            },
+          }),
+        ];
+      }
+    };
+  
+    if (kaboomLevel) {
+      map = addLevel(kaboomLevel, {
+        height: boxSize,
+        width: boxSize,
+        pos: center(),
+        // @ts-ignore
+        any: (ch, pos) => mapChars(ch, pos),
+      });
+    } else {
+      // no result
+    }
+
   }
+
+  startGame();
 });
 
 k.go("main");
