@@ -1,6 +1,6 @@
 # WordPuzzleGame
 
-:rocket: [Live Demo](https://zgrcnltnk.github.io/WordPuzzleGame/ "Live Demo")
+:rocket: [Live Demo](https://ozgurdevo.github.io/WordPuzzleGame/ "Live Demo")
 
 ### Code run steps! ###
 

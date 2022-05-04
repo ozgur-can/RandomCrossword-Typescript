@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zgrcnltnk/WordPuzzleGame.git"
+    "url": "git+https://github.com/ozgurdevo/WordPuzzleGame.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zgrcnltnk/WordPuzzleGame/issues"
+    "url": "https://github.com/ozgurdevo/WordPuzzleGame/issues"
   },
-  "homepage": "https://github.com/zgrcnltnk/WordPuzzleGame#readme",
+  "homepage": "https://github.com/ozgurdevo/WordPuzzleGame#readme",
   "devDependencies": {
     "@types/lodash": "^4.14.178",
     "esbuild": "^0.14.3",
