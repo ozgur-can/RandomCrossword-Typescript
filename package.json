@@ -1,5 +1,5 @@
 {
-  "name": "WordPuzzleGame",
+  "name": "RandomCrossword-Typescript",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ozgurdevo/WordPuzzleGame.git"
+    "url": "git+https://github.com/ozgurdevo/RandomCrossword-Typescript.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ozgurdevo/WordPuzzleGame/issues"
+    "url": "https://github.com/ozgurdevo/RandomCrossword-Typescript/issues"
   },
-  "homepage": "https://github.com/ozgurdevo/WordPuzzleGame#readme",
+  "homepage": "https://github.com/ozgurdevo/RandomCrossword-Typescript#readme",
   "devDependencies": {
     "@types/lodash": "^4.14.178",
     "esbuild": "^0.14.3",

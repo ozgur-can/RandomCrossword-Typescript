@@ -1,6 +1,14 @@
-# WordPuzzleGame
+<h2  align="center">RandomCrossword-Typescript</h2>
 
-:rocket: [Live Demo](https://ozgurdevo.github.io/WordPuzzleGame/ "Live Demo")
+Crossword puzzle
+
+### Used tools ###
+* Kaboom
+* LinkedList
+* Typescript
+* Esbuild
+
+:rocket: [Live Demo](https://ozgurdevo.github.io/RandomCrossword-Typescript/ "Live Demo")
 
 ### Code run steps! ###
 
