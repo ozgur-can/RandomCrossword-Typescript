@@ -8,7 +8,7 @@ Crossword puzzle
 * Typescript
 * Esbuild
 
-:rocket: [Live Demo](https://ozgurdevo.github.io/RandomCrossword-Typescript/ "Live Demo")
+:rocket: [Live Demo](https://ozgur-can.github.io/RandomCrossword-Typescript/ "Live Demo")
 
 ### Code run steps! ###
 
